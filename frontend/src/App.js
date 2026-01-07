@@ -19,7 +19,7 @@ function App() {
 
   return (
     <div>
-      <h1> Inlägg från Sanity</h1>
+      <h1>Sanity</h1>
 
       {posts.map((post) => (
         <div key={post._id}>
