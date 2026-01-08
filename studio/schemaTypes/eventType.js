@@ -42,6 +42,5 @@ export const eventType = {
         layout: 'tags'
       }
     },
-  
   ],
 }
