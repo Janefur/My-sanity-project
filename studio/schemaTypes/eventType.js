@@ -33,6 +33,15 @@ export const eventType = {
       title: 'Number of Attendees',
       type: 'number',
     },
+    {
+      name: 'tags',
+      title: 'Tags',
+      type: 'array',
+      of: [{ type: 'string' }],
+      options: {
+        layout: 'tags'
+      }
+    },
   
   ],
 }
