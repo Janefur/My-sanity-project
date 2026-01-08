@@ -1,0 +1,23 @@
+.single-event {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: 'Arial', sans-serif;
+}
+
+.single-event h2 {
+  color: #333;
+  margin-bottom: 20px;
+  font-size: 2.5rem;
+}
+
+.single-event p {
+  line-height: 1.6;
+  margin-bottom: 15px;
+  color: #666;
+}
+
+.single-event img {
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}

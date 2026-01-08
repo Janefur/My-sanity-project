@@ -1,56 +1,48 @@
+import EventCard from "../components/Eventcard";
+import React, { use } from "react";
+import { useEffect, useState } from "react";
 import { sanityClient } from "../sanityClient"; // <-- här importerar du klienten
-import React, { useEffect, useState } from "react";
+import './StartPage.css';
+
+
 function StartPage() {
-  const [posts, setPosts] = useState([]);
+    const [post, setPost] = useState(null);
+    useEffect(() => {
+      async function fetchPosts() {
+        const query = `*[_type == "pageType" && slug.current == "startsida"][0] {
+          _id,
+          title,
+          slug,
+          body
+        }`;
 
-  useEffect(() => {
-    async function fetchPosts() {
-      // Expandera bildreferensen för att få URL:en
-      const query = `*[_type == "event"] {
-        _id,
-        name,
-        date,
-        location,
-        description,
-        numberOfAttendees,
-        tags,
-        "imageUrl": photo.asset->url
-      }`;
+        const data = await sanityClient.fetch(query);
 
-      const data = await sanityClient.fetch(query);
-
-      setPosts(data);
-    }
-
-    fetchPosts();
-  }, []);
-
+        setPost(data);
+      }
+      fetchPosts();
+    }, []);
+    
   return (
-    <div>
-      <h1>Events från Sanity</h1>
-
-      {posts.map((post) => (
-        <div key={post._id}>
-          <h2>{post.name}</h2>
-          <p>📍 {post.location}</p>
-          <p>📅 {new Date(post.date).toLocaleDateString()}</p>
-          {post.description && <p>{post.description}</p>}
-          {post.tags && post.tags.length > 0 && (
-            <div style={{ marginBottom: "10px" }}>
-              {post.tags.map((tag, index) => (
-                <span key={index}>{tag}</span>
-              ))}
-            </div>
-          )}
-          {post.imageUrl && (
-            <img
-              src={post.imageUrl}
-              alt={post.name}
-              style={{ maxWidth: "400px", height: "auto" }}
-            />
-          )}
-        </div>
-      ))}
+    <div className="start-page">
+      <h2>
+        {post?.title || "Inga title hittades"}
+      </h2>
+      {post?.body?.length > 0 ? (
+        post.body.map((block, index) => {
+          if (block._type === "block") {
+            return (
+              <p key={index}>
+                {block.children.map((child) => child.text).join("")}
+              </p>
+            );
+          }
+          return null;
+        })
+      ) : (
+        <p>Inget innehåll tillgängligt</p>
+      )}
+      <EventCard  />
     </div>
   );
 }

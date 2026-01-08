@@ -1,16 +1,19 @@
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import StartPage from "./pages/StartPage";
+import SingleEvent from "./pages/SingleEvent";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 
-//import SingleEvent from "./pages/SingleEvent";
-
 function App() {
   return (
-    <>
+    <Router>
       <Navbar />
-      <StartPage />
+      <Routes>
+        <Route path="/" element={<StartPage />} />
+        <Route path="/event" element={<SingleEvent />} />
+      </Routes>
       <Footer />
-    </>
+    </Router>
   );
 }
 
