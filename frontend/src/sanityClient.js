@@ -1,11 +1,9 @@
 import { createClient } from "@sanity/client";
 
 export const sanityClient = createClient({
-  projectId: "MY_SANITY_PROJECT",
-
+  projectId: "pu3m65bh",
   dataset: "production",
-
-  useCdn: true,
-
-  apiVersion: "2026-01-07",
+  useCdn: false, // inaktivera CDN för utveckling
+  apiVersion: "2023-01-01",
+  token: undefined, // ingen token för publikt innehåll
 });

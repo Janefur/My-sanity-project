@@ -33,5 +33,6 @@ export const eventType = {
       title: 'Number of Attendees',
       type: 'number',
     },
+  
   ],
 }
