@@ -15,6 +15,7 @@ function App() {
         location,
         description,
         numberOfAttendees,
+        tags,
         "imageUrl": photo.asset->url
       }`;
 
@@ -36,6 +37,17 @@ function App() {
           <p>📍 {post.location}</p>
           <p>📅 {new Date(post.date).toLocaleDateString()}</p>
           {post.description && <p>{post.description}</p>}
+          {post.tags && post.tags.length > 0 && (
+            <div style={{ marginBottom: '10px' }}>
+              {post.tags.map((tag, index) => (
+                <span
+                  key={index}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
           {post.imageUrl && (
             <img
               src={post.imageUrl}
