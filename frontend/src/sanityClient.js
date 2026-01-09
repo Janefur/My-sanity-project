@@ -5,5 +5,5 @@ export const sanityClient = createClient({
   dataset: "production",
   useCdn: false, // inaktivera CDN för utveckling
   apiVersion: "2023-01-01",
-  token: undefined, // ingen token för publikt innehåll
+  token: process.env.SANITY_AUTH_TOKEN,
 });
