@@ -37,10 +37,12 @@ export const eventType = {
       name: 'tags',
       title: 'Tags',
       type: 'array',
-      of: [{ type: 'string' }],
+      of: [{type: 'string'}],
       options: {
-        layout: 'tags'
-      }
+        layout: 'tags',
+      },
     },
   ],
 }
+
+export default eventType
