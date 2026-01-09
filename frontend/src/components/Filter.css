@@ -1,0 +1,111 @@
+/* Filter komponent styling */
+.all-tags {
+  margin: 20px 0;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+}
+
+.all-tags h3 {
+  color: #333;
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+}
+
+.tags-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.tag {
+  background-color: #007bff;
+  color: white;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  outline: none;
+}
+
+.tag:hover {
+  background-color: #0056b3;
+  transform: translateY(-1px);
+}
+
+.tag.active {
+  background-color: #28a745;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+.tag:active {
+  transform: translateY(0);
+}
+
+/* Tagged events section */
+.tagged-events {
+  margin-top: 20px;
+  padding: 15px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid #007bff;
+}
+
+.tagged-events h4 {
+  margin: 0 0 15px 0;
+  color: #333;
+  font-size: 1.1rem;
+}
+
+.events-list {
+  display: grid;
+  gap: 10px;
+}
+
+.event-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.event-preview {
+  padding: 12px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #e9ecef;
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.event-preview:hover {
+  border-color: #007bff;
+  box-shadow: 0 2px 8px rgba(0,123,255,0.1);
+  transform: translateY(-1px);
+}
+
+.event-preview h5 {
+  margin: 0 0 8px 0;
+  color: #333;
+  font-size: 16px;
+}
+
+.event-preview p {
+  margin: 4px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .tags-container {
+    gap: 6px;
+  }
+  
+  .tag {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+}

@@ -10,6 +10,7 @@ function EventCard() {
         _id,
         name,
         date,
+        slug,
         location,
         description,
         numberOfAttendees,
