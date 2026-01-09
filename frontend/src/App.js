@@ -10,7 +10,7 @@ function App() {
       <Navbar />
       <Routes>
         <Route path="/" element={<StartPage />} />
-        <Route path="/event" element={<SingleEvent />} />
+        <Route path="/events/:slug" element={<SingleEvent />} />
       </Routes>
       <Footer />
     </Router>

@@ -9,6 +9,12 @@ export const eventType = {
       type: 'string',
     },
     {
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
+      options: {source: 'name', maxLength: 96}
+    },
+    {
       name: 'date',
       title: 'Event Date',
       type: 'datetime',
