@@ -1,33 +1,34 @@
 export const pageType = {
-  name: "pageType",
-  title: "Page Type",
-  type: "document",
+  name: 'pageType',
+  title: 'Page Type',
+  type: 'document',
   fields: [
     {
-      name: "title",
-      title: "Title",
-      type: "string",
+      name: 'title',
+      title: 'Title',
+      type: 'string',
     },
     {
-      name: "slug",
-      title: "Slug",
-      type: "slug",
+      name: 'slug',
+      title: 'Slug',
+      type: 'slug',
       options: {
-        source: "title",
+        source: 'title',
         maxLength: 96,
       },
     },
     {
-      name: "body",
-      title: "Body",
-      type: "array",
-      of: [{ type: "block" }],
-    },{
-      name:'slides',
-      title:'Slides',
-      type:'array',
-      of:[{type:'image'}],
-    }
+      name: 'body',
+      title: 'Body',
+      type: 'array',
+      of: [{type: 'block'}, {type: 'carousel'}],
+    },
+    {
+      name: 'carousel',
+      title: 'Carousel',
+      type: 'array',
+      of: [{type: 'carousel'}],
+    },
   ],
-};
-export default pageType;
+}
+export default pageType
