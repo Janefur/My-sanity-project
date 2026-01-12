@@ -83,5 +83,15 @@ export const sanityQueries = {
   // Hämta events med specifik tag
   getEventsByTag: async (tag) => {
     return await sanityClient.fetch(queries.eventsByTag(tag));
+  },
+
+  // Skapa ett nytt event
+  createEvent: async (doc) => {
+    return await sanityClient.create(doc);
+  },
+
+  // Publicera ett event
+  publishEvent: async (id) => {
+    return await sanityClient.patch(id).commit();
   }
 };

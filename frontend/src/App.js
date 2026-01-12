@@ -1,18 +1,37 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import StartPage from "./pages/StartPage";
 import SingleEvent from "./pages/SingleEvent";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
+import CreateEvent from "./pages/CreateEvent";
 
-function App() {
+function AppContent() {
+  const location = useLocation();
+
   return (
-    <Router>
+    <>
       <Navbar />
       <Routes>
         <Route path="/" element={<StartPage />} />
         <Route path="/events/:slug" element={<SingleEvent />} />
+        <Route path="/CreateEvent" element={<CreateEvent />}></Route>
       </Routes>
-      <Footer />
+      {location.pathname === "/CreateEvent" ? null : (
+        <Footer variant="default" />
+      )}
+    </>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }

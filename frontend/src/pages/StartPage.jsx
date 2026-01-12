@@ -1,16 +1,14 @@
-import EventCard from "../components/Eventcard";
+
 import Carousel from "../components/Carousel";
 import Searchbar from "../components/Searchbar";
 import Filter from "../components/Filter";
-import React, { use } from "react";
 import { useEffect, useState } from "react";
-import { sanityClient } from "../sanityClient"; // <-- här importerar du klienten
 import { sanityQueries } from "../sanityQueries";
 import './StartPage.css';
 
 function StartPage() {
     const [post, setPost] = useState(null);
-    
+
     useEffect(() => {
       async function fetchPageData() {
         const pageData = await sanityQueries.getPageBySlug("startsida");

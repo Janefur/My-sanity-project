@@ -1,31 +1,22 @@
 import { useEffect, useState } from "react";
-import { sanityClient } from "../sanityClient";
+
+import { sanityQueries } from "../sanityQueries";
+
 
 export default function CreateEvent() {
   const [posts, setPosts] = useState([]);
   const [fields, setFields] = useState({ name: "", date: "", location: "", description: "" });
   const [isDuplicate, setIsDuplicate] = useState(false);
+
   useEffect(() => {
       async function fetchPosts() {
-        // Expandera bildreferensen för att få URL:en
-        const query = `*[_type == "event"] {
-          _id,
-          name,
-          date,
-          location,
-          description,
-          numberOfAttendees,
-          tags,
-          "imageUrl": photo.asset->url
-        }`;
-
-        const data = await sanityClient.fetch(query);
-
+        const data = await sanityQueries.getAllEvents();
         setPosts(data || []);
       }
 
       fetchPosts();
     }, []);
+
   useEffect(() => {
     const name = fields.name && fields.name.trim().toLowerCase();
     if (!name) return setIsDuplicate(false);
@@ -39,6 +30,8 @@ export default function CreateEvent() {
   };
 
  const handleSubmit = async (e) => {
+  console.log("handleSubmit called", sanityQueries.getAllEvents());
+console.log("Sanity token exists:", !!process.env.SANITY_AUTH_TOKEN)
   e.preventDefault();
 
   if (isDuplicate) return alert("Ett event med det namnet finns redan.");
@@ -51,10 +44,14 @@ export default function CreateEvent() {
       description: fields.description,
     };
 
-    // const created = await sanityClient.create(doc);
-    // console.log("Skapat:", created);
-    console.log(doc)
+    const created = await sanityQueries.createEvent(doc);
+
+    // Publicera dokumentet så att det blir sökbart
+    await sanityQueries.publishEvent(created._id);
+
     // uppdatera UI / rensa fält
+    setFields({name:"", date:"", location:"", description:""})
+    alert("Event skapat och publicerat!");
   } catch (err) {
     console.error("Sanity create error:", err);
     alert("Kunde inte skapa event. Kolla konsolen för fel.");
@@ -99,9 +96,7 @@ export default function CreateEvent() {
           ></textarea>
 
           <br />
-          <button type="submit" disabled={isDuplicate || !fields.name.trim()}>
-            Skapa event
-          </button>
+          <button type="submit">Lägg till</button>
         </form>
       </div>
     </div>

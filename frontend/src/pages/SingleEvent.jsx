@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { sanityQueries } from "../sanityQueries";
 import './SingleEvent.css';
@@ -21,7 +21,7 @@ function SingleEvent() {
         }
       }
     };
-    
+
     fetchEvent();
   }, [slug]);
 
@@ -41,7 +41,7 @@ function SingleEvent() {
         <p><strong>📅 Datum:</strong> {new Date(event.date).toLocaleDateString()}</p>
         {event.description && <p><strong>Beskrivning:</strong> {event.description}</p>}
         {event.numberOfAttendees && <p><strong>Antal deltagare:</strong> {event.numberOfAttendees}</p>}
-        
+
         {event.tags && event.tags.length > 0 && (
           <div className="event-tags">
             <strong>Kategorier:</strong>
@@ -52,10 +52,10 @@ function SingleEvent() {
             </div>
           </div>
         )}
-        
+
         {event.imageUrl && (
-          <img 
-            src={event.imageUrl} 
+          <img
+            src={event.imageUrl}
             alt={event.name}
             className="event-image"
           />

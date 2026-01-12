@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState} from 'react';
 import { Link } from 'react-router-dom';
 import { sanityQueries } from "../sanityQueries";
 import './Searchbar.css';
@@ -10,6 +10,9 @@ export async function getSearchResults(query) {
 
     // Filtrera events baserat på sökfrågan (case-insensitive)
     const filteredEvents = allEvents.filter((event) => {
+      // Hoppa över events utan slug
+      if (!event.slug || !event.slug.current) return false;
+
       const lowerCaseQuery = query.toLowerCase();
       return (
         event.name.toLowerCase().includes(lowerCaseQuery) ||
@@ -35,8 +38,8 @@ export function SearchResults({ filteredEvents }) {
   return (
     <div className="search-results">
       {filteredEvents.map(event => (
-        <Link 
-          key={event._id} 
+        <Link
+          key={event._id}
           to={`/events/${event.slug.current}`}
           className="search-result-link"
         >
@@ -78,7 +81,7 @@ function Searchbar() {
   const handleInputChange = (e) => {
     const value = e.target.value;
     setQuery(value);
-    
+
     // Debounce search - vänta 300ms efter användaren slutat skriva
     clearTimeout(window.searchTimeout);
     window.searchTimeout = setTimeout(() => {
@@ -98,7 +101,7 @@ function Searchbar() {
         />
         {isLoading && <div className="loading">Söker...</div>}
       </div>
-      
+
       {query && <SearchResults filteredEvents={results} />}
     </div>
   );
