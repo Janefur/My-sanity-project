@@ -30,31 +30,39 @@ export default function CreateEvent() {
   };
 
  const handleSubmit = async (e) => {
-  console.log("handleSubmit called", sanityQueries.getAllEvents());
-console.log("Sanity token exists:", !!process.env.SANITY_AUTH_TOKEN)
   e.preventDefault();
 
   if (isDuplicate) return alert("Ett event med det namnet finns redan.");
+  
   try {
-    const doc = {
-      _type: "event",
-      name: fields.name,
-      date: fields.date,
-      location: fields.location,
-      description: fields.description,
-    };
+    // Skicka till vårt säkra backend API
+    const response = await fetch('http://localhost:3001/api/create-event', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        name: fields.name,
+        date: fields.date,
+        location: fields.location,
+        description: fields.description,
+      }),
+    });
 
-    const created = await sanityQueries.createEvent(doc);
+    const data = await response.json();
 
-    // Publicera dokumentet så att det blir sökbart
-    await sanityQueries.publishEvent(created._id);
+    if (!response.ok) {
+      throw new Error(data.error || 'Något gick fel');
+    }
 
-    // uppdatera UI / rensa fält
-    setFields({name:"", date:"", location:"", description:""})
-    alert("Event skapat och publicerat!");
+    // Success!
+    setFields({ name: "", date: "", location: "", description: "" });
+    alert("Event skapat säkert via backend!");
+    console.log("Skapat event:", data.event);
+    
   } catch (err) {
-    console.error("Sanity create error:", err);
-    alert("Kunde inte skapa event. Kolla konsolen för fel.");
+    console.error("Backend API error:", err);
+    alert(`Kunde inte skapa event: ${err.message}`);
   }
 };
 
