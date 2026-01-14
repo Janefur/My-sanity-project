@@ -1,8 +1,11 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sanityQueries } from "../sanityQueries";
+import ImageUpload from "../components/Imageuploader.jsx";
 
 export default function CreateEvent() {
+  const [image, setImage] = useState(null);
+
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
   const [fields, setFields] = useState({
@@ -53,19 +56,19 @@ export default function CreateEvent() {
           date: fields.date,
           location: fields.location,
           description: fields.description,
+          imageUrl: image,
         }),
       });
 
-      const data = await response.json();
+      const text = await response.text();
+      console.log("RAW BACKEND RESPONSE:", text);
 
       if (!response.ok) {
-        throw new Error(data.error || "Något gick fel");
+        throw new Error(text || "Något gick fel");
       }
 
-      // Success!
       setFields({ name: "", date: "", location: "", description: "" });
-      alert("Event skapat säkert via backend!");
-      console.log("Skapat event:", data.event);
+      alert("Event skapat!");
     } catch (err) {
       console.error("Backend API error:", err);
       alert(`Kunde inte skapa event: ${err.message}`);
@@ -115,6 +118,10 @@ export default function CreateEvent() {
             value={fields.description}
             onChange={handleChange}
           ></textarea>
+          <ImageUpload
+            initialImage={image}
+            onImageSelect={(img) => setImage(img)}
+          />
 
           <br />
           <button type="submit">Lägg till</button>
