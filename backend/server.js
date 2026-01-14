@@ -1,6 +1,8 @@
 const express = require('express');
 const cors = require('cors');
 const { createClient } = require('@sanity/client');
+const fs = require('fs');
+const path = require('path');
 require('dotenv').config({ path: '../.env' }); // Läs .env från root
 
 const app = express();
@@ -73,6 +75,53 @@ app.post('/api/create-event', async (req, res) => {
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'OK', message: 'Backend server is running' });
+});
+
+// Login endpoint
+app.post('/api/login', (req, res) => {
+  try {
+    const { username, password } = req.body;
+
+    // Validering
+    if (!username || !password) {
+      return res.status(400).json({ 
+        success: false, 
+        error: 'Username och password krävs' 
+      });
+    }
+
+    // Läs users.json
+    const usersPath = path.join(__dirname, 'api', 'login', 'users.json');
+    const usersData = fs.readFileSync(usersPath, 'utf8');
+    const users = JSON.parse(usersData);
+
+    // Hitta användare
+    const user = users.find(
+      u => u.username === username && u.password === password
+    );
+
+    if (user) {
+      // Lyckad login
+      res.json({ 
+        success: true, 
+        message: 'Login lyckades!',
+        user: { id: user.id, username: user.username }
+      });
+    } else {
+      // Misslyckad login
+      res.status(401).json({ 
+        success: false, 
+        error: 'Felaktigt användarnamn eller lösenord' 
+      });
+    }
+
+  } catch (error) {
+    console.error('Login error:', error);
+    res.status(500).json({ 
+      success: false, 
+      error: 'Server error' 
+    });
+  }
 });
 
 app.listen(PORT, () => {
