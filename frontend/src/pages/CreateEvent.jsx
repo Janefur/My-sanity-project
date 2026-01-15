@@ -56,7 +56,7 @@ export default function CreateEvent() {
           date: fields.date,
           location: fields.location,
           description: fields.description,
-          imageUrl: image,
+          image: image,
         }),
       });
 
@@ -118,10 +118,8 @@ export default function CreateEvent() {
             value={fields.description}
             onChange={handleChange}
           ></textarea>
-          <ImageUpload
-            initialImage={image}
-            onImageSelect={(img) => setImage(img)}
-          />
+
+          <ImageUpload onImageSelect={setImage} />
 
           <br />
           <button type="submit">Lägg till</button>
