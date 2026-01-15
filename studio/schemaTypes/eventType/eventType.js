@@ -5,15 +5,18 @@ export const eventType = {
   fields: [
     {
       name: 'name',
-      title: 'Event Name',
-      type: 'string',
-      i18n: true,
+      title: 'Event Name', 
+      type: 'object',
+      fields: [
+        {name: 'sv', type: 'string', title: 'Svenska'},
+        {name: 'en', type: 'string', title: 'English'},
+      ],
     },
     {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {source: 'name', maxLength: 96},
+      options: {source: 'name.sv', maxLength: 96},
     },
     {
       name: 'date',
@@ -28,8 +31,11 @@ export const eventType = {
     {
       name: 'description',
       title: 'Description',
-      type: 'text',
-      i18n: true,
+      type: 'object',
+      fields: [
+        {name: 'sv', type: 'text', title: 'Svenska'},
+        {name: 'en', type: 'text', title: 'English'},
+      ],
     },
     {
       name: 'photo',
@@ -62,6 +68,13 @@ export const eventType = {
       },
     },
   ],
+  preview: {
+    select: {
+      title: 'name.sv',
+      subtitle: 'location',
+      media: 'photo',
+    },
+  },
 }
 
 export default eventType

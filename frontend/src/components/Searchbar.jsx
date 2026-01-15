@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { sanityQueries } from "../sanityQueries";
 import './Searchbar.css';
 
-export async function getSearchResults(query) {
+export async function getSearchResults(query, language = "sv") {
   try {
     // Hämta alla events från Sanity
-    const allEvents = await sanityQueries.getAllEvents();
+    const allEvents = await sanityQueries.getAllEvents(language);
 
     // Filtrera events baserat på sökfrågan (case-insensitive)
     const filteredEvents = allEvents.filter((event) => {
@@ -15,9 +15,9 @@ export async function getSearchResults(query) {
 
       const lowerCaseQuery = query.toLowerCase();
       return (
-        event.name.toLowerCase().includes(lowerCaseQuery) ||
-        event.description.toLowerCase().includes(lowerCaseQuery) ||
-        event.location.toLowerCase().includes(lowerCaseQuery) ||
+        event.name?.toLowerCase().includes(lowerCaseQuery) ||
+        event.description?.toLowerCase().includes(lowerCaseQuery) ||
+        event.location?.toLowerCase().includes(lowerCaseQuery) ||
         (event.tags && event.tags.some(tag => tag.toLowerCase().includes(lowerCaseQuery)))
       );
     });
@@ -55,7 +55,7 @@ export function SearchResults({ filteredEvents }) {
 }
 
 // Huvudkomponent för sökfunktionen
-function Searchbar() {
+function Searchbar({ language = "sv" }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -68,7 +68,7 @@ function Searchbar() {
 
     setIsLoading(true);
     try {
-      const searchResults = await getSearchResults(searchQuery);
+      const searchResults = await getSearchResults(searchQuery, language);
       setResults(searchResults);
     } catch (error) {
       console.error('Search error:', error);

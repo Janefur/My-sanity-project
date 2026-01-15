@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { sanityQueries } from "../sanityQueries";
 import './StartPage.css';
 
-function StartPage() {
+function StartPage({ language, events, pages }) {
     const [post, setPost] = useState(null);
     const [loggedInUser, setLoggedInUser] = useState(null);
 
@@ -19,12 +19,17 @@ function StartPage() {
     };
 
     useEffect(() => {
-      async function fetchPageData() {
-        const pageData = await sanityQueries.getPageBySlug("startsida");
-        setPost(pageData);
+      // Om pages prop finns, använd den istället för att hämta
+      if (pages) {
+        setPost(pages);
+      } else {
+        async function fetchPageData() {
+          const pageData = await sanityQueries.getPageBySlug("startsida", language || "sv");
+          setPost(pageData);
+        }
+        fetchPageData();
       }
-      fetchPageData();
-    }, []);
+    }, [pages, language]);
 
     
 
@@ -38,8 +43,8 @@ function StartPage() {
         )}
       </h2>
       <Login onLogin={handleLogin} onLogout={handleLogout} loggedInUser={loggedInUser} />
-      <Searchbar />
-      <Filter showAllTags={true} />
+      <Searchbar language={language} />
+      <Filter showAllTags={true} language={language} events={events} />
       {post?.body?.length > 0 ? (
         post.body.map((block, index) => {
           if (block._type === "block") {

@@ -47,7 +47,7 @@ function AppContent() {
                   />
                }
             />
-            <Route path="/events/:slug" element={<SingleEvent />} />
+            <Route path="/events/:slug" element={<SingleEvent language={language} />} />
             <Route path="/CreateEvent" element={<CreateEvent />}></Route>
          </Routes>
          {location.pathname === "/CreateEvent" ? null : (

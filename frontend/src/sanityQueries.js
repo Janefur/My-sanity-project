@@ -13,9 +13,9 @@ export const queries = {
       title,
       events[]->{
         _id,
-        name,
+        "name": coalesce(name.${language}, name),
         "imageUrl": photo.asset->url,
-        description,
+        "description": coalesce(description.${language}, description),
         location,
         date
       }
@@ -24,13 +24,13 @@ export const queries = {
 
    allEvents: (
       language = "sv"
-   ) => `*[_type == "event" && language == "${language}"] {
+   ) => `*[_type == "event"] {
     _id,
-    name,
+    "name": coalesce(name.${language}, name),
     date,
     slug,
     location,
-    description,
+    "description": coalesce(description.${language}, description),
     numberOfAttendees,
     tags,
     "imageUrl": photo.asset->url
@@ -39,13 +39,13 @@ export const queries = {
    eventById: (
       slug,
       language = "sv"
-   ) => `*[_type == "event" && slug.current == "${slug}" && language == "${language}"][0] {
+   ) => `*[_type == "event" && slug.current == "${slug}"][0] {
     _id,
-    name,
+    "name": coalesce(name.${language}, name),
     date,
     slug,
     location,
-    description,
+    "description": coalesce(description.${language}, description),
     numberOfAttendees,
     tags,
     "imageUrl": photo.asset->url
@@ -54,13 +54,13 @@ export const queries = {
    eventsByTag: (
       tag,
       language = "sv"
-   ) => `*[_type == "event" && "${tag}" in tags && language == "${language}"] {
+   ) => `*[_type == "event" && "${tag}" in tags] {
     _id,
-    name,
+    "name": coalesce(name.${language}, name),
     date,
     slug,
     location,
-    description,
+    "description": coalesce(description.${language}, description),
     numberOfAttendees,
     tags,
     "imageUrl": photo.asset->url

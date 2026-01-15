@@ -19,7 +19,7 @@ export async function getEventsByTags(filters) {
     return [];
   }
 }
-function Filter({ event, showAllTags = false }) {
+function Filter({ event, showAllTags = false, language = "sv", events }) {
   const [allEvents, setAllEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedTag, setSelectedTag] = useState(null);
@@ -28,20 +28,26 @@ function Filter({ event, showAllTags = false }) {
   // Fetcha alla events när showAllTags är true
   useEffect(() => {
     if (showAllTags) {
-      const fetchEvents = async () => {
-        setLoading(true);
-        try {
-          const events = await sanityQueries.getAllEvents();
-          setAllEvents(events);
-        } catch (error) {
-          console.error('Error fetching events for tags:', error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchEvents();
+      // Om events prop finns, använd den
+      if (events && events.length > 0) {
+        setAllEvents(events);
+        setLoading(false);
+      } else {
+        const fetchEvents = async () => {
+          setLoading(true);
+          try {
+            const fetchedEvents = await sanityQueries.getAllEvents(language);
+            setAllEvents(fetchedEvents);
+          } catch (error) {
+            console.error('Error fetching events for tags:', error);
+          } finally {
+            setLoading(false);
+          }
+        };
+        fetchEvents();
+      }
     }
-  }, [showAllTags]);
+  }, [showAllTags, language, events]);
 
   // Hantera tag-klick
   const handleTagClick = async (tag) => {
@@ -53,8 +59,8 @@ function Filter({ event, showAllTags = false }) {
 
     setSelectedTag(tag);
     try {
-      const events = await sanityQueries.getEventsByTag(tag);
-      setTaggedEvents(events);
+      const fetchedEvents = await sanityQueries.getEventsByTag(tag, language);
+      setTaggedEvents(fetchedEvents);
     } catch (error) {
       console.error('Error fetching events by tag:', error);
     }

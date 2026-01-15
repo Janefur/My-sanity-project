@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { sanityQueries } from "../sanityQueries";
 import './SingleEvent.css';
 
-function SingleEvent() {
+function SingleEvent({ language = "sv" }) {
   const { slug } = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,7 +12,7 @@ function SingleEvent() {
     const fetchEvent = async () => {
       if (slug) {
         try {
-          const eventData = await sanityQueries.getEventBySlug(slug);
+          const eventData = await sanityQueries.getEventBySlug(slug, language);
           setEvent(eventData);
         } catch (error) {
           console.error('Error fetching event:', error);
@@ -23,7 +23,7 @@ function SingleEvent() {
     };
 
     fetchEvent();
-  }, [slug]);
+  }, [slug, language]);
 
   if (loading) {
     return <div className="single-event">Laddar event...</div>;
