@@ -10,10 +10,15 @@ export default defineConfig({
   projectId: 'pu3m65bh',
   dataset: 'production',
 
-  plugins: [
-    structureTool(), 
-    visionTool(),
-  ],
+  plugins: [structureTool(), visionTool()],
+
+  i18n: {
+    baseLanguage: 'sv',
+    languages: [
+      {id: 'sv', title: 'Svenska'},
+      {id: 'en', title: 'English'},
+    ],
+  },
 
   schema: {
     types: schemaTypes,
@@ -27,6 +32,6 @@ export default defineConfig({
         return `http://localhost:3000/events/${document.slug.current}`
       }
       return prev
-    }
-  }
+    },
+  },
 })

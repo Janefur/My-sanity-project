@@ -7,12 +7,13 @@ export const eventType = {
       name: 'name',
       title: 'Event Name',
       type: 'string',
+      i18n: true,
     },
     {
       name: 'slug',
       title: 'Slug',
       type: 'slug',
-      options: {source: 'name', maxLength: 96}
+      options: {source: 'name', maxLength: 96},
     },
     {
       name: 'date',
@@ -28,6 +29,7 @@ export const eventType = {
       name: 'description',
       title: 'Description',
       type: 'text',
+      i18n: true,
     },
     {
       name: 'photo',
@@ -46,6 +48,17 @@ export const eventType = {
       of: [{type: 'string'}],
       options: {
         layout: 'tags',
+      },
+    },
+    {
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      options: {
+        list: [
+          {title: 'Svenska', value: 'sv'},
+          {title: 'English', value: 'en'},
+        ],
       },
     },
   ],
