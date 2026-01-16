@@ -51,6 +51,7 @@ export const eventType = {
       name: 'addedAttendees',
       title: 'Added Attendees',
       type: 'array',
+      readOnly: true,
       of: [{type: 'string'}],
      
     },

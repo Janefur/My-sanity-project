@@ -83,7 +83,7 @@ function SingleEvent({ language = "sv", currentUser }) {
   const eventDescription = typeof event.description === 'string' ? event.description : event.description?.[language] || event.description?.sv || '';
 
   // Bokningslogik
-  const hasBooked = event.addedAttendees?.includes(currentUser?.id);
+  const hasBooked = event.addedAttendees?.includes(currentUser?.username);
   const isFull = event.numberOfAttendees <= 0;
 
   return (

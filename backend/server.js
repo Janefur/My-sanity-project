@@ -92,16 +92,16 @@ app.get("/api/health", (req, res) => {
 // Enkel booking endpoint
 app.post("/api/book-event", async (req, res) => {
   try {
-    const { eventId, userId, userName } = req.body;
+    const { eventId, userName } = req.body;
 
-    if (!eventId || !userId) {
-      return res.status(400).json({ error: "eventId och userId krävs" });
+    if (!eventId || !userName) {
+      return res.status(400).json({ error: "eventId och userName krävs" });
     }
 
     // Hämta eventet först för att kolla om användaren redan bokat
     const event = await sanityClient.getDocument(eventId);
 
-    if (event.addedAttendees?.includes(userId)) {
+    if (event.addedAttendees?.includes(userName)) {
       return res.status(400).json({ error: "Du har redan bokat detta event" });
     }
 
@@ -109,7 +109,7 @@ app.post("/api/book-event", async (req, res) => {
     const updated = await sanityClient
       .patch(eventId)
       .setIfMissing({ addedAttendees: [] })
-      .append('addedAttendees', [userId])
+      .append('addedAttendees', [userName])
       .dec({ numberOfAttendees: 1 })
       .commit();
 
