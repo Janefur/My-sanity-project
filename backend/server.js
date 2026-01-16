@@ -25,9 +25,6 @@ const sanityClient = createClient({
 // API endpoint för att skapa events
 app.post("/api/create-event", async (req, res) => {
   try {
-    console.log("Received request:", req.body);
-    console.log("Token exists:", !!process.env.SANITY_AUTH_TOKEN);
-
     const { name, date, location, description, image } = req.body;
 
     // Validering
@@ -67,17 +64,11 @@ app.post("/api/create-event", async (req, res) => {
       photo,
     };
 
-    console.log("Creating document:", doc);
-
     // Skapa i Sanity
     const created = await sanityClient.create(doc);
 
-    console.log("Created successfully:", created._id);
-
     // Publicera dokumentet så det blir synligt för frontend
     const published = await sanityClient.patch(created._id).commit();
-
-    console.log("Published successfully:", published._id);
 
     // Returnera svar
     res.status(201).json({
@@ -96,6 +87,37 @@ app.post("/api/create-event", async (req, res) => {
 // Health check
 app.get("/api/health", (req, res) => {
   res.json({ status: "OK", message: "Backend server is running" });
+});
+
+// Enkel booking endpoint
+app.post("/api/book-event", async (req, res) => {
+  try {
+    const { eventId, userId, userName } = req.body;
+
+    if (!eventId || !userId) {
+      return res.status(400).json({ error: "eventId och userId krävs" });
+    }
+
+    // Hämta eventet först för att kolla om användaren redan bokat
+    const event = await sanityClient.getDocument(eventId);
+
+    if (event.addedAttendees?.includes(userId)) {
+      return res.status(400).json({ error: "Du har redan bokat detta event" });
+    }
+
+    // Lägg till userId i addedAttendees och minska numberOfAttendees
+    const updated = await sanityClient
+      .patch(eventId)
+      .setIfMissing({ addedAttendees: [] })
+      .append('addedAttendees', [userId])
+      .dec({ numberOfAttendees: 1 })
+      .commit();
+
+    res.json({ success: true, event: updated });
+  } catch (error) {
+    console.error("Booking error:", error);
+    res.status(500).json({ error: "Kunde inte boka: " + error.message });
+  }
 });
 
 // Login endpoint

@@ -3,17 +3,17 @@ import { useParams } from "react-router-dom";
 import { sanityQueries } from "../sanityQueries";
 import './SingleEvent.css';
 
-function SingleEvent({ language = "sv" }) {
+function SingleEvent({ language = "sv", currentUser }) {
   const { slug } = useParams();
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [bookingLoading, setBookingLoading] = useState(false);
 
   useEffect(() => {
     const fetchEvent = async () => {
       if (slug) {
         try {
           const eventData = await sanityQueries.getEventBySlug(slug, language);
-          console.log('Fetched event data:', eventData);
           setEvent(eventData);
         } catch (error) {
           console.error('Error fetching event:', error);
@@ -25,6 +25,50 @@ function SingleEvent({ language = "sv" }) {
 
     fetchEvent();
   }, [slug, language]);
+
+  const handleBooking = async () => {
+    if (!currentUser) {
+      alert('Du måste vara inloggad för att boka!');
+      return;
+    }
+
+    // Extra koll för att förhindra dubbelbokning
+    if (event.addedAttendees?.includes(currentUser.id)) {
+      alert('Du har redan bokat detta event!');
+      return;
+    }
+
+    setBookingLoading(true);
+
+    try {
+      const response = await fetch('http://localhost:3001/api/book-event', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventId: event._id,
+          userId: currentUser.id,
+          userName: currentUser.username
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        setEvent({
+          ...event,
+          numberOfAttendees: event.numberOfAttendees - 1,
+          addedAttendees: [...(event.addedAttendees || []), currentUser.id]
+        });
+        alert('Bokning lyckades! 🎉');
+      } else {
+        alert(data.error);
+      }
+    } catch (error) {
+      alert('Kunde inte boka');
+    } finally {
+      setBookingLoading(false);
+    }
+  };
 
   if (loading) {
     return <div className="single-event">Laddar event...</div>;
@@ -38,6 +82,10 @@ function SingleEvent({ language = "sv" }) {
   const eventName = typeof event.name === 'string' ? event.name : event.name?.[language] || event.name?.sv || 'Untitled Event';
   const eventDescription = typeof event.description === 'string' ? event.description : event.description?.[language] || event.description?.sv || '';
 
+  // Bokningslogik
+  const hasBooked = event.addedAttendees?.includes(currentUser?.id);
+  const isFull = event.numberOfAttendees <= 0;
+
   return (
     <div className="single-event">
       <h1>{eventName}</h1>
@@ -47,14 +95,14 @@ function SingleEvent({ language = "sv" }) {
             <p><strong>📍 Plats:</strong> {event.location}</p>
             <p><strong>📅 Datum:</strong> {new Date(event.date).toLocaleDateString()}</p>
             {eventDescription && <p><strong>Beskrivning:</strong> {eventDescription}</p>}
-            {event.numberOfAttendees && <p><strong>Antal deltagare:</strong> {event.numberOfAttendees}</p>}
+            <p>🎫 Platser kvar: {isFull ? ' Fullbokad' : event.numberOfAttendees}</p>
           </>
         ) : (
           <>
             <p><strong>📍 Location:</strong> {event.location}</p>
             <p><strong>📅 Date:</strong> {new Date(event.date).toLocaleDateString()}</p>
             {eventDescription && <p><strong>Description:</strong> {eventDescription}</p>}
-            {event.numberOfAttendees && <p><strong>Number of Attendees:</strong> {event.numberOfAttendees}</p>}
+            <p>🎫 Spots left: {isFull ? ' Fullbokad' : event.numberOfAttendees}</p>
           </>
         )
         }
@@ -84,6 +132,29 @@ function SingleEvent({ language = "sv" }) {
           />
         )}
       </div>
+
+      {/* Bokningsknapp */}
+      {currentUser && !hasBooked && (
+        <button 
+          onClick={handleBooking}
+          disabled={bookingLoading}
+          style={{ 
+            background: isFull ? 'orange' : 'green', 
+            color: 'white',
+            padding: '10px 20px',
+            cursor: 'pointer',
+            border: 'none',
+            borderRadius: '5px',
+            fontSize: '16px'
+          }}
+        >
+          {bookingLoading ? 'Bokar...' : (isFull ? 'Väntelista' : 'Boka in dig på event')}
+        </button>
+      )}
+
+            {hasBooked && <p style={{color: 'green'}}>{isFull ? 'Du står på väntelista' : 'Bokad!'}</p>}
+      {!currentUser && <p>Logga in för att boka</p>}
+
     </div>
   );
 }

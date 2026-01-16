@@ -30,7 +30,7 @@ function ImageUpload({ onImageSelect, initialImage }) {
   return (
     <div>
       <p style={{ fontWeight: "bold" }}>
-        Ladda upp bild för tjänst eller vara:
+        Ladda upp en bild för ditt event (valfritt):
       </p>
       <input type="file" accept="image/*" onChange={handleImageChange} />
 

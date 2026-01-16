@@ -1,25 +1,24 @@
-import { sanityClient } from "../sanityClient"; // <-- här importerar du klienten
+import { sanityClient } from "../sanityClient";
 import React, { useEffect, useState } from "react";
+
 function EventCard() {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     async function fetchPosts() {
-      // Expandera bildreferensen för att få URL:en
-      const query = `*[_type == "event"] {
+      const query = `*[_type == "event"] | order(date asc) {
         _id,
-        name,
+        "name": coalesce(name.sv, name),
         date,
         slug,
         location,
-        description,
+        "description": coalesce(description.sv, description),
         numberOfAttendees,
         tags,
         "imageUrl": photo.asset->url
       }`;
 
       const data = await sanityClient.fetch(query);
-
       setPosts(data);
     }
 
@@ -28,28 +27,33 @@ function EventCard() {
 
   return (
     <div>
-      {posts.map((post) => (
-        <div key={post._id}>
-          <h2>{post.name}</h2>
-          <p>📍 {post.location}</p>
-          <p>📅 {new Date(post.date).toLocaleDateString()}</p>
-          {post.description && <p>{post.description}</p>}
-          {post.tags && post.tags.length > 0 && (
-            <div style={{ marginBottom: "10px" }}>
-              {post.tags.map((tag, index) => (
-                <span key={index}>{tag}</span>
-              ))}
-            </div>
-          )}
-          {post.imageUrl && (
-            <img
-              src={post.imageUrl}
-              alt={post.name}
-              style={{ maxWidth: "400px", height: "auto" }}
-            />
-          )}
-        </div>
-      ))}
+      {posts.map((post) => {
+        const isFull = post.numberOfAttendees <= 0;
+
+        return (
+          <div key={post._id}>
+            <h2>{post.name}</h2>
+            <p>📍 {post.location}</p>
+            <p>📅 {new Date(post.date).toLocaleDateString()}</p>
+            <p>🎫 Platser kvar: {isFull ? 'Fullbokad' : post.numberOfAttendees}</p>
+            {post.description && <p>{post.description}</p>}
+            {post.tags && post.tags.length > 0 && (
+              <div style={{ marginBottom: "10px" }}>
+                {post.tags.map((tag, index) => (
+                  <span key={index}>{tag} </span>
+                ))}
+              </div>
+            )}
+            {post.imageUrl && (
+              <img
+                src={post.imageUrl}
+                alt={post.name}
+                style={{ maxWidth: "400px", height: "auto" }}
+              />
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }

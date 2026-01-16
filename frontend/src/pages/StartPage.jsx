@@ -2,7 +2,6 @@
 import Carousel from "../components/Carousel";
 import Searchbar from "../components/Searchbar";
 import Filter from "../components/Filter";
-import Login from "../components/Login";
 import { useEffect, useState } from "react";
 import { sanityQueries } from "../sanityQueries";
 import './StartPage.css';
@@ -42,7 +41,6 @@ function StartPage({ language, events, pages }) {
             : post.title
         )}
       </h2>
-      <Login onLogin={handleLogin} onLogout={handleLogout} loggedInUser={loggedInUser} />
       <Searchbar language={language} />
       <Filter showAllTags={true} language={language} events={events} />
       {post?.body?.length > 0 ? (

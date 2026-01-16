@@ -49,6 +49,7 @@ export const queries = {
     location,
     "description": coalesce(description.${language}, description),
     numberOfAttendees,
+    addedAttendees,
     tags,
     "imageUrl": photo.asset->url
   }`,

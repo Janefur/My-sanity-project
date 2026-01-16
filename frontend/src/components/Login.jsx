@@ -35,7 +35,7 @@ function Login({ onLogin, onLogout, loggedInUser }) {
 
       if (data.success) {
         // Login lyckades!
-        onLogin(data.user); // Skicka user till StartPage
+        onLogin(data.user);
         setIsFormVisible(false);
         setUsername("");
         setPassword("");
@@ -44,13 +44,12 @@ function Login({ onLogin, onLogout, loggedInUser }) {
         setError(data.error || 'Login misslyckades');
       }
     } catch (error) {
-      console.error('Login error:', error);
       setError('Kunde inte ansluta till servern');
     }
   };
 
   const handleLogout = () => {
-    onLogout(); // Använd prop från StartPage
+    onLogout();
   };
 
 
@@ -64,8 +63,8 @@ function Login({ onLogin, onLogout, loggedInUser }) {
           </button>
         ) : (
           <button onClick={toggleLoginForm}>
-            {isFormVisible ? 'Tillbaka' : "Profil"}
             {isFormVisible ? <MdClose size={24}  /> : <FaUser size={24} />}
+            {isFormVisible ? 'Tillbaka' : "Profil"}
           </button>
         )}
       </div>
