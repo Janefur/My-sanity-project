@@ -23,8 +23,10 @@ export const queries = {
   }`,
 
    allEvents: (
-      language = "sv"
-   ) => `*[_type == "event"] {
+      language = "sv",
+      sortBy = "date",
+      order = "asc"
+   ) => `*[_type == "event"] | order(${sortBy} ${order}) {
     _id,
     "name": coalesce(name.${language}, name),
     date,
@@ -53,8 +55,10 @@ export const queries = {
 
    eventsByTag: (
       tag,
-      language = "sv"
-   ) => `*[_type == "event" && "${tag}" in tags] {
+      language = "sv",
+      sortBy = "date",
+      order = "asc"
+   ) => `*[_type == "event" && "${tag}" in tags] | order(${sortBy} ${order}) {
     _id,
     "name": coalesce(name.${language}, name),
     date,
@@ -73,8 +77,8 @@ export const sanityQueries = {
    },
 
    // Hämta alla events
-   getAllEvents: async (language = "sv") => {
-      return await sanityClient.fetch(queries.allEvents(language));
+   getAllEvents: async (language = "sv", sortBy = "date", order = "asc") => {
+      return await sanityClient.fetch(queries.allEvents(language, sortBy, order));
    },
 
    // Hämta specifikt event
@@ -83,8 +87,8 @@ export const sanityQueries = {
    },
 
    // Hämta events med specifik tag
-   getEventsByTag: async (tag, language = "sv") => {
-      return await sanityClient.fetch(queries.eventsByTag(tag, language));
+   getEventsByTag: async (tag, language = "sv", sortBy = "date", order = "asc") => {
+      return await sanityClient.fetch(queries.eventsByTag(tag, language, sortBy, order));
    },
    // Skapa ett nytt event
    createEvent: async (doc) => {

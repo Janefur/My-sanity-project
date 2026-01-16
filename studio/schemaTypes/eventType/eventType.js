@@ -48,6 +48,12 @@ export const eventType = {
       type: 'number',
     },
     {
+      name:'AddedAttendees',
+      title: 'Added Attendees',
+      type: 'array',
+      of: [{type: 'string'}],
+    },
+    {
       name: 'tags',
       title: 'Tags',
       type: 'array',
@@ -56,6 +62,7 @@ export const eventType = {
         layout: 'tags',
       },
     },
+
     {
       name: 'language',
       title: 'Language',

@@ -3,12 +3,12 @@ import { Link } from 'react-router-dom';
 import { sanityQueries } from "../sanityQueries";
 import './Filter.css';
 
-export async function getEventsByTags(filters) {
+export async function getEventsByTags(filters, language = "sv") {
   try {
-    const allEvents = await sanityQueries.getAllEvents();
+    const allEvents = await sanityQueries.getAllEvents(language);
 
     const filteredEvents = allEvents.filter((event) => {
-      const matchesTags = filters.tags.length > 0 ? filters.tags.some(tag => event.tags.includes(tag)) : true;
+      const matchesTags = filters.tags.length > 0 ? filters.tags.some(tag => event.tags?.includes(tag)) : true;
 
       return matchesTags;
     });
@@ -30,6 +30,7 @@ function Filter({ event, showAllTags = false, language = "sv", events }) {
     if (showAllTags) {
       // Om events prop finns, använd den
       if (events && events.length > 0) {
+        console.log('Filter: Använder events från props', events);
         setAllEvents(events);
         setLoading(false);
       } else {
@@ -37,6 +38,7 @@ function Filter({ event, showAllTags = false, language = "sv", events }) {
           setLoading(true);
           try {
             const fetchedEvents = await sanityQueries.getAllEvents(language);
+            console.log('Filter: Hämtade events', fetchedEvents);
             setAllEvents(fetchedEvents);
           } catch (error) {
             console.error('Error fetching events for tags:', error);
