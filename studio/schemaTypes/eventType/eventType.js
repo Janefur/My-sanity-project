@@ -46,20 +46,21 @@ export const eventType = {
       name: 'capacity',
       title: 'Capacity',
       type: 'number',
+      description: 'Max antal besökare',
     },
     {
-      name: 'bookings',
-      title: 'Bookings',
+      name: 'attendees',
+      title: 'Attendees',
       type: 'array',
-      readOnly: true,
       of: [{type: 'string'}],
+      description: 'Lista över bokade besökare',
     },
     {
       name: 'waitlist',
       type: 'array',
       title: 'Waitlist',
       of: [{type: 'string'}],
-      readOnly: true,
+      description: 'Lista över personer på väntelistan',
     },
     {
       name: 'tags',
@@ -68,18 +69,6 @@ export const eventType = {
       of: [{type: 'string'}],
       options: {
         layout: 'tags',
-      },
-    },
-
-    {
-      name: 'language',
-      title: 'Language',
-      type: 'string',
-      options: {
-        list: [
-          {title: 'Svenska', value: 'sv'},
-          {title: 'English', value: 'en'},
-        ],
       },
     },
   ],

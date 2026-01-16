@@ -34,7 +34,10 @@ function SingleEvent({ language = "sv", currentUser }) {
     }
 
     // Extra koll för att förhindra dubbelbokning
-    if (event.bookings?.includes(currentUser.id)) {
+    const alreadyAttending = event.attendees?.includes(currentUser.username);
+    const alreadyOnWaitlist = event.waitlist?.includes(currentUser.username);
+    
+    if (alreadyAttending || alreadyOnWaitlist) {
       alert('Du har redan bokat detta event!');
       return;
     }
@@ -47,7 +50,6 @@ function SingleEvent({ language = "sv", currentUser }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           eventId: event._id,
-          userId: currentUser.id,
           userName: currentUser.username
         })
       });
@@ -56,16 +58,15 @@ function SingleEvent({ language = "sv", currentUser }) {
 
       if (response.ok) {
         setBookingStatus(data.status); // "attendees" eller "waitlist"
-        setEvent({
-          ...event,
-          capacity: event.capacity - 1,
-          bookings: [...(event.bookings || []), currentUser.id]
-        });
+        
+        // Hämta uppdaterad data från Sanity
+        const updatedEvent = await sanityQueries.getEventBySlug(slug, language);
+        setEvent(updatedEvent);
 
         if (data.status === 'attendees') {
           alert('Bokning lyckades! 🎉');
         } else if (data.status === 'waitlist') {
-          alert('Du är tillagd på väntelistan');
+          alert('Du är tillagd på väntelistan 📝');
         }
       } else {
         alert(data.error);
@@ -90,9 +91,10 @@ function SingleEvent({ language = "sv", currentUser }) {
   const eventDescription = typeof event.description === 'string' ? event.description : event.description?.[language] || event.description?.sv || '';
 
   // Bokningslogik
-  const hasBooked = event.bookings?.includes(currentUser?.username);
-  const isOnWaitlist = bookingStatus === 'waitlist';
-  const availableSpots = event.capacity - (event.bookings?.length || 0);
+  const hasBooked = event.attendees?.includes(currentUser?.username) || event.waitlist?.includes(currentUser?.username);
+  const isOnWaitlist = event.waitlist?.includes(currentUser?.username);
+  const bookedCount = (event.attendees?.length || 0);
+  const availableSpots = event.capacity - bookedCount;
   const isFull = availableSpots <= 0;
 
   return (
