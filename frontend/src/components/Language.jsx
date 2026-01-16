@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { sanityQueries } from '../sanityQueries';
 import { useLocation } from 'react-router-dom';
+import 'flag-icons/css/flag-icons.min.css';
+
 
 
 export default function Language({ onLanguageChange }) {
@@ -37,16 +39,16 @@ export default function Language({ onLanguageChange }) {
         onClick={() => handleLanguageChange('sv')}
         title="Svenska"
         disabled={loading}
-      >
-        🇸🇪 SE
+      >  <span className="fi fi-se"></span> Svenska
+
       </button>
+
       <button
         className={`language-btn ${currentLanguage === 'en' ? 'active' : ''}`}
         onClick={() => handleLanguageChange('en')}
         title="English"
         disabled={loading}
-      >
-        🇬🇧 GB
+      >  <span className="fi fi-gb"></span> English
       </button>
     </div>
   );
