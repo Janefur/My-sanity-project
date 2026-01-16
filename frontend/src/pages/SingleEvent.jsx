@@ -8,6 +8,7 @@ function SingleEvent({ language = "sv", currentUser }) {
   const [event, setEvent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
+  const [bookingStatus, setBookingStatus] = useState(null); // "attendees" eller "waitlist"
 
   useEffect(() => {
     const fetchEvent = async () => {
@@ -33,7 +34,7 @@ function SingleEvent({ language = "sv", currentUser }) {
     }
 
     // Extra koll för att förhindra dubbelbokning
-    if (event.addedAttendees?.includes(currentUser.id)) {
+    if (event.bookings?.includes(currentUser.id)) {
       alert('Du har redan bokat detta event!');
       return;
     }
@@ -54,12 +55,18 @@ function SingleEvent({ language = "sv", currentUser }) {
       const data = await response.json();
 
       if (response.ok) {
+        setBookingStatus(data.status); // "attendees" eller "waitlist"
         setEvent({
           ...event,
-          numberOfAttendees: event.numberOfAttendees - 1,
-          addedAttendees: [...(event.addedAttendees || []), currentUser.id]
+          capacity: event.capacity - 1,
+          bookings: [...(event.bookings || []), currentUser.id]
         });
-        alert('Bokning lyckades! 🎉');
+
+        if (data.status === 'attendees') {
+          alert('Bokning lyckades! 🎉');
+        } else if (data.status === 'waitlist') {
+          alert('Du är tillagd på väntelistan');
+        }
       } else {
         alert(data.error);
       }
@@ -83,8 +90,10 @@ function SingleEvent({ language = "sv", currentUser }) {
   const eventDescription = typeof event.description === 'string' ? event.description : event.description?.[language] || event.description?.sv || '';
 
   // Bokningslogik
-  const hasBooked = event.addedAttendees?.includes(currentUser?.username);
-  const isFull = event.numberOfAttendees <= 0;
+  const hasBooked = event.bookings?.includes(currentUser?.username);
+  const isOnWaitlist = bookingStatus === 'waitlist';
+  const availableSpots = event.capacity - (event.bookings?.length || 0);
+  const isFull = availableSpots <= 0;
 
   return (
     <div className="single-event">
@@ -95,14 +104,14 @@ function SingleEvent({ language = "sv", currentUser }) {
             <p><strong>📍 Plats:</strong> {event.location}</p>
             <p><strong>📅 Datum:</strong> {new Date(event.date).toLocaleDateString()}</p>
             {eventDescription && <p><strong>Beskrivning:</strong> {eventDescription}</p>}
-            <p>🎫 Platser kvar: {isFull ? ' Fullbokad' : event.numberOfAttendees}</p>
+            <p>🎫 Platser kvar: {isFull ? 'Fullbokad' : availableSpots}</p>
           </>
         ) : (
           <>
             <p><strong>📍 Location:</strong> {event.location}</p>
             <p><strong>📅 Date:</strong> {new Date(event.date).toLocaleDateString()}</p>
             {eventDescription && <p><strong>Description:</strong> {eventDescription}</p>}
-            <p>🎫 Spots left: {isFull ? ' Fullbokad' : event.numberOfAttendees}</p>
+            <p>🎫 Spots left: {isFull ? 'Fullbokad' : availableSpots}</p>
           </>
         )
         }
@@ -134,12 +143,12 @@ function SingleEvent({ language = "sv", currentUser }) {
       </div>
 
       {/* Bokningsknapp */}
-      {currentUser && !hasBooked && (
-        <button 
+      {currentUser && !hasBooked &&(
+        <button
           onClick={handleBooking}
           disabled={bookingLoading}
-          style={{ 
-            background: isFull ? 'orange' : 'green', 
+          style={{
+            background: isFull ? 'orange' : 'green',
             color: 'white',
             padding: '10px 20px',
             cursor: 'pointer',
@@ -152,7 +161,7 @@ function SingleEvent({ language = "sv", currentUser }) {
         </button>
       )}
 
-            {hasBooked && <p style={{color: 'green'}}>{isFull ? 'Du står på väntelista' : 'Bokad!'}</p>}
+            {hasBooked && <p style={{color: isOnWaitlist ? 'orange' : 'green'}}>{isOnWaitlist ? 'Du står på väntelistan' : 'Bokad!'}</p>}
       {!currentUser && <p>Logga in för att boka</p>}
 
     </div>

@@ -13,7 +13,7 @@ function EventCard() {
         slug,
         location,
         "description": coalesce(description.sv, description),
-        numberOfAttendees,
+        capacity,
         tags,
         "imageUrl": photo.asset->url
       }`;
@@ -28,14 +28,14 @@ function EventCard() {
   return (
     <div>
       {posts.map((post) => {
-        const isFull = post.numberOfAttendees <= 0;
+        const isFull = post.capacity <= 0;
 
         return (
           <div key={post._id}>
             <h2>{post.name}</h2>
             <p>📍 {post.location}</p>
             <p>📅 {new Date(post.date).toLocaleDateString()}</p>
-            <p>🎫 Platser kvar: {isFull ? 'Fullbokad' : post.numberOfAttendees}</p>
+            <p>🎫 Platser kvar: {isFull ? 'Fullbokad' : post.capacity}</p>
             {post.description && <p>{post.description}</p>}
             {post.tags && post.tags.length > 0 && (
               <div style={{ marginBottom: "10px" }}>

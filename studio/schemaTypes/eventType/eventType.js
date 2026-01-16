@@ -5,7 +5,7 @@ export const eventType = {
   fields: [
     {
       name: 'name',
-      title: 'Event Name', 
+      title: 'Event Name',
       type: 'object',
       fields: [
         {name: 'sv', type: 'string', title: 'Svenska'},
@@ -43,17 +43,23 @@ export const eventType = {
       type: 'image',
     },
     {
-      name: 'numberOfAttendees',
-      title: 'Number of Attendees',
+      name: 'capacity',
+      title: 'Capacity',
       type: 'number',
     },
     {
-      name: 'addedAttendees',
-      title: 'Added Attendees',
+      name: 'bookings',
+      title: 'Bookings',
       type: 'array',
       readOnly: true,
       of: [{type: 'string'}],
-     
+    },
+    {
+      name: 'waitlist',
+      type: 'array',
+      title: 'Waitlist',
+      of: [{type: 'string'}],
+      readOnly: true,
     },
     {
       name: 'tags',

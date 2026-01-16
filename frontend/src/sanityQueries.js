@@ -33,7 +33,7 @@ export const queries = {
     slug,
     location,
     "description": coalesce(description.${language}, description),
-    numberOfAttendees,
+    capacity,
     tags,
     "imageUrl": photo.asset->url
   }`,
@@ -48,8 +48,8 @@ export const queries = {
     slug,
     location,
     "description": coalesce(description.${language}, description),
-    numberOfAttendees,
-    addedAttendees,
+    capacity,
+    bookings,
     tags,
     "imageUrl": photo.asset->url
   }`,
@@ -66,7 +66,7 @@ export const queries = {
     slug,
     location,
     "description": coalesce(description.${language}, description),
-    numberOfAttendees,
+    capacity,
     tags,
     "imageUrl": photo.asset->url
   }`,
@@ -79,7 +79,9 @@ export const sanityQueries = {
 
    // Hämta alla events
    getAllEvents: async (language = "sv", sortBy = "date", order = "asc") => {
-      return await sanityClient.fetch(queries.allEvents(language, sortBy, order));
+      return await sanityClient.fetch(
+         queries.allEvents(language, sortBy, order)
+      );
    },
 
    // Hämta specifikt event
@@ -88,8 +90,15 @@ export const sanityQueries = {
    },
 
    // Hämta events med specifik tag
-   getEventsByTag: async (tag, language = "sv", sortBy = "date", order = "asc") => {
-      return await sanityClient.fetch(queries.eventsByTag(tag, language, sortBy, order));
+   getEventsByTag: async (
+      tag,
+      language = "sv",
+      sortBy = "date",
+      order = "asc"
+   ) => {
+      return await sanityClient.fetch(
+         queries.eventsByTag(tag, language, sortBy, order)
+      );
    },
    // Skapa ett nytt event
    createEvent: async (doc) => {

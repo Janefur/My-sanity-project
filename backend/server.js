@@ -15,158 +15,161 @@ app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // Sanity client med write-token
 const sanityClient = createClient({
-  projectId: "pu3m65bh",
-  dataset: "production",
-  useCdn: false,
-  apiVersion: "2023-01-01",
-  token: process.env.SANITY_AUTH_TOKEN,
+   projectId: "pu3m65bh",
+   dataset: "production",
+   useCdn: false,
+   apiVersion: "2023-01-01",
+   token: process.env.SANITY_AUTH_TOKEN,
 });
 
 // API endpoint för att skapa events
 app.post("/api/create-event", async (req, res) => {
-  try {
-    const { name, date, location, description, image } = req.body;
+   try {
+      const { name, date, location, description, image } = req.body;
 
-    // Validering
-    if (!name || !date || !location) {
-      return res.status(400).json({ error: "Namn, datum och plats krävs" });
-    }
+      // Validering
+      if (!name || !date || !location) {
+         return res.status(400).json({ error: "Namn, datum och plats krävs" });
+      }
 
-    // Ladda upp bild om den finns
+      // Ladda upp bild om den finns
 
-    let photo = null;
+      let photo = null;
 
-    if (image) {
-      const base64Data = image.split(",")[1];
-      const buffer = Buffer.from(base64Data, "base64");
+      if (image) {
+         const base64Data = image.split(",")[1];
+         const buffer = Buffer.from(base64Data, "base64");
 
-      const asset = await sanityClient.assets.upload("image", buffer, {
-        filename: "event-image.png",
-        contentType: "image/png",
-      });
+         const asset = await sanityClient.assets.upload("image", buffer, {
+            filename: "event-image.png",
+            contentType: "image/png",
+         });
 
-      photo = {
-        _type: "image",
-        asset: {
-          _type: "reference",
-          _ref: asset._id,
-        },
+         photo = {
+            _type: "image",
+            asset: {
+               _type: "reference",
+               _ref: asset._id,
+            },
+         };
+      }
+
+      // Skapa event-dokument
+      const doc = {
+         _type: "event",
+         name: name.trim(),
+         date,
+         location: location.trim(),
+         description: description?.trim() || "",
+         photo,
       };
-    }
 
-    // Skapa event-dokument
-    const doc = {
-      _type: "event",
-      name: name.trim(),
-      date,
-      location: location.trim(),
-      description: description?.trim() || "",
-      photo,
-    };
+      // Skapa i Sanity
+      const created = await sanityClient.create(doc);
 
-    // Skapa i Sanity
-    const created = await sanityClient.create(doc);
+      // Publicera dokumentet så det blir synligt för frontend
+      const published = await sanityClient.patch(created._id).commit();
 
-    // Publicera dokumentet så det blir synligt för frontend
-    const published = await sanityClient.patch(created._id).commit();
-
-    // Returnera svar
-    res.status(201).json({
-      success: true,
-      event: published,
-    });
-  } catch (error) {
-    console.error("Error creating event:", error);
-    res.status(500).json({
-      error: "Kunde inte skapa event",
-      details: error.message,
-    });
-  }
+      // Returnera svar
+      res.status(201).json({
+         success: true,
+         event: published,
+      });
+   } catch (error) {
+      console.error("Error creating event:", error);
+      res.status(500).json({
+         error: "Kunde inte skapa event",
+         details: error.message,
+      });
+   }
 });
 
 // Health check
 app.get("/api/health", (req, res) => {
-  res.json({ status: "OK", message: "Backend server is running" });
+   res.json({ status: "OK", message: "Backend server is running" });
 });
 
 // Enkel booking endpoint
 app.post("/api/book-event", async (req, res) => {
-  try {
-    const { eventId, userName } = req.body;
+   try {
+      const { eventId, userName } = req.body;
 
-    if (!eventId || !userName) {
-      return res.status(400).json({ error: "eventId och userName krävs" });
-    }
+      if (!eventId || !userName) {
+         return res.status(400).json({ error: "eventId och userName krävs" });
+      }
 
-    // Hämta eventet först för att kolla om användaren redan bokat
-    const event = await sanityClient.getDocument(eventId);
+      const field = event.capacity > 0 ? "attendees" : "waitlist";
+      // Hämta eventet först för att kolla om användaren redan bokat
+      const event = await sanityClient.getDocument(eventId);
 
-    if (event.addedAttendees?.includes(userName)) {
-      return res.status(400).json({ error: "Du har redan bokat detta event" });
-    }
+      if (event.bookings?.includes(userName)) {
+         return res
+            .status(400)
+            .json({ error: "Du har redan bokat detta event" });
+      }
 
-    // Lägg till userId i addedAttendees och minska numberOfAttendees
-    const updated = await sanityClient
-      .patch(eventId)
-      .setIfMissing({ addedAttendees: [] })
-      .append('addedAttendees', [userName])
-      .dec({ numberOfAttendees: 1 })
-      .commit();
+      // Lägg till userId i bookings och minska capacity
+      const updated = await sanityClient
+         .patch(eventId)
+         .setIfMissing({ bookings: [], waitlist: [] })
+         .append(field, [userName])
+         .dec({ capacity: 1 })
+         .commit();
 
-    res.json({ success: true, event: updated });
-  } catch (error) {
-    console.error("Booking error:", error);
-    res.status(500).json({ error: "Kunde inte boka: " + error.message });
-  }
+      res.json({ success: true, event: updated, status: field });
+   } catch (error) {
+      console.error("Booking error:", error);
+      res.status(500).json({ error: "Kunde inte boka: " + error.message });
+   }
 });
 
 // Login endpoint
 app.post("/api/login", (req, res) => {
-  try {
-    const { username, password } = req.body;
+   try {
+      const { username, password } = req.body;
 
-    // Validering
-    if (!username || !password) {
-      return res.status(400).json({
-        success: false,
-        error: "Username och password krävs",
+      // Validering
+      if (!username || !password) {
+         return res.status(400).json({
+            success: false,
+            error: "Username och password krävs",
+         });
+      }
+
+      // Läs users.json
+      const usersPath = path.join(__dirname, "api", "login", "users.json");
+      const usersData = fs.readFileSync(usersPath, "utf8");
+      const users = JSON.parse(usersData);
+
+      // Hitta användare
+      const user = users.find(
+         (u) => u.username === username && u.password === password
+      );
+
+      if (user) {
+         // Lyckad login
+         res.json({
+            success: true,
+            message: "Login lyckades!",
+            user: { id: user.id, username: user.username },
+         });
+      } else {
+         // Misslyckad login
+         res.status(401).json({
+            success: false,
+            error: "Felaktigt användarnamn eller lösenord",
+         });
+      }
+   } catch (error) {
+      console.error("Login error:", error);
+      res.status(500).json({
+         success: false,
+         error: "Server error",
       });
-    }
-
-    // Läs users.json
-    const usersPath = path.join(__dirname, "api", "login", "users.json");
-    const usersData = fs.readFileSync(usersPath, "utf8");
-    const users = JSON.parse(usersData);
-
-    // Hitta användare
-    const user = users.find(
-      (u) => u.username === username && u.password === password
-    );
-
-    if (user) {
-      // Lyckad login
-      res.json({
-        success: true,
-        message: "Login lyckades!",
-        user: { id: user.id, username: user.username },
-      });
-    } else {
-      // Misslyckad login
-      res.status(401).json({
-        success: false,
-        error: "Felaktigt användarnamn eller lösenord",
-      });
-    }
-  } catch (error) {
-    console.error("Login error:", error);
-    res.status(500).json({
-      success: false,
-      error: "Server error",
-    });
-  }
+   }
 });
 
 app.listen(PORT, () => {
-  console.log(`Backend server running on http://localhost:${PORT}`);
-  console.log(`Token loaded: ${process.env.SANITY_AUTH_TOKEN ? "YES" : "NO"}`);
+   console.log(`Backend server running on http://localhost:${PORT}`);
+   console.log(`Token loaded: ${process.env.SANITY_AUTH_TOKEN ? "YES" : "NO"}`);
 });
