@@ -38,7 +38,7 @@ export default function Language({ onLanguageChange }) {
         title="Svenska"
         disabled={loading}
       >
-        🇸🇪
+        🇸🇪 SE
       </button>
       <button
         className={`language-btn ${currentLanguage === 'en' ? 'active' : ''}`}
@@ -46,7 +46,7 @@ export default function Language({ onLanguageChange }) {
         title="English"
         disabled={loading}
       >
-        🇬🇧
+        🇬🇧 GB
       </button>
     </div>
   );
