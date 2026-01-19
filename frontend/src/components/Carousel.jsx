@@ -14,13 +14,15 @@ function Carousel({ carousel }) {
     title = carousel.title;
   } else if (carousel?.events && carousel.events.length > 0) {
     // Struktur med events array - konvertera till image format
-    photo = carousel.events.map(event => ({
-      imageUrl: event.imageUrl,
-      alt: event.name,
-      caption: event.name,
-      location: event.location,
-      date: event.date
-    }));
+  photo = carousel.events
+      .filter(event => event !== null && event !== undefined)
+      .map(event => ({
+        imageUrl: event.imageUrl,
+        alt: event.name,
+        caption: event.name,
+        location: event.location,
+        date: event.date
+      }));
     title = carousel.title;
   } else if (carousel?.photo) {
     // Struktur med photo array
@@ -37,13 +39,13 @@ function Carousel({ carousel }) {
   }
 
   const nextPhoto = () => {
-    setCurrentIndex((prevIndex) => 
+    setCurrentIndex((prevIndex) =>
       prevIndex === photo.length - 1 ? 0 : prevIndex + 1
     );
   };
 
   const prevPhoto = () => {
-    setCurrentIndex((prevIndex) => 
+    setCurrentIndex((prevIndex) =>
       prevIndex === 0 ? photo.length - 1 : prevIndex - 1
     );
   };
@@ -57,16 +59,16 @@ function Carousel({ carousel }) {
       {title && (
         <h3 className="carousel-title">{title}</h3>
       )}
-    
-      
+
+
       <div className="carousel-container">
         <button className="carousel-btn prev" onClick={prevPhoto}>
           ‹
         </button>
-        
+
         <div className="carousel-slide">
-          <img 
-            src={photo[currentIndex].imageUrl} 
+          <img
+            src={photo[currentIndex].imageUrl}
             alt={photo[currentIndex].alt || `Slide ${currentIndex + 1}`}
           />
           {photo[currentIndex].caption && (
