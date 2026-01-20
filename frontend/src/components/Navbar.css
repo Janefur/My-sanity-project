@@ -1,0 +1,199 @@
+.NavBar {
+    background: linear-gradient(#A01A7D, #5B1048);
+    position: relative;
+    /* viktigt */
+    display: flex;
+    align-items: center;
+    /* centrerar innehållet */
+    justify-content: flex-start;
+    width: 100%;
+    height: 100px;
+    transform: none;
+    gap: 32px;
+}
+
+
+.NavBar img {
+    margin-top: auto;
+    height: 50px;
+    width: 120px;
+    padding-top: 10px;
+
+
+}
+
+.language-switcher {
+    position: absolute;
+    top: 10px;
+    /* längst upp */
+    right: 20px;
+    /* höger hörn (eller left om du vill) */
+}
+
+.iconTextContainer {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 110px;
+    gap: 10px;
+    margin-left: 5px;
+}
+
+
+.center {
+    margin: 0 auto;
+}
+
+.login {
+    margin-top: auto;
+    color: white;
+    margin-bottom: 2px;
+
+}
+
+.language-btn {
+    color: rgb(238, 241, 243);
+    width: 50px;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+.language-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.language-btn.active {
+    outline: 2px solid white;
+    border-radius: 4px;
+}
+
+
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    padding-top: 150px;
+    z-index: 1000;
+    width: 91%;
+    height: 100%;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    z-index: 1001;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    border-bottom: 1px solid #eee;
+}
+
+.modal-header h2 {
+    margin: 0;
+    font-size: 1.3rem;
+    color: #5B1048;
+}
+
+.modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: #666;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-close:hover {
+    color: #000;
+}
+
+.modal-body {
+    padding: 20px;
+}
+
+.modal-body form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.modal-body label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    font-weight: 500;
+    color: #5B1048;
+}
+
+.modal-body input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 1rem;
+}
+
+.modal-body input:focus {
+    outline: none;
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.login-btn {
+    background-color: #A01A7D;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.login-btn:hover {
+    background-color: #0056b3;
+}
+
+.error-message {
+    color: #d32f2f;
+    background-color: #ffebee;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+@media (max-width: 480px) {
+    .modal-content {
+        width: 95%;
+    }
+
+    .modal-header h2 {
+        font-size: 1.1rem;
+    }
+
+    .modal-body {
+        padding: 15px;
+    }
+}

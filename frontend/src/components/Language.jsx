@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { sanityQueries } from '../sanityQueries';
 import { useLocation } from 'react-router-dom';
 import 'flag-icons/css/flag-icons.min.css';
+import "../components/Navbar.css"
 
 
 
@@ -39,7 +40,7 @@ export default function Language({ onLanguageChange }) {
         onClick={() => handleLanguageChange('sv')}
         title="Svenska"
         disabled={loading}
-      >  <span className="fi fi-se"></span> Svenska
+      >  <span className="fi fi-se"></span> Sv
 
       </button>
 
@@ -48,7 +49,7 @@ export default function Language({ onLanguageChange }) {
         onClick={() => handleLanguageChange('en')}
         title="English"
         disabled={loading}
-      >  <span className="fi fi-gb"></span> English
+      >  <span className="fi fi-gb"></span> En
       </button>
     </div>
   );
