@@ -101,6 +101,10 @@ app.post("/api/book-event", async (req, res) => {
       // Hämta eventet först för att kolla om användaren redan bokat
       const event = await sanityClient.getDocument(eventId);
 
+      if (!event) {
+         return res.status(404).json({ error: "Event hittades inte" });
+      }
+
       // Kolla om användaren redan bokat (i attendees ELLER waitlist)
       if (event.attendees?.includes(userName) || event.waitlist?.includes(userName)) {
          return res
@@ -108,9 +112,10 @@ app.post("/api/book-event", async (req, res) => {
             .json({ error: "Du har redan bokat detta event" });
       }
 
-      // Räkna ut lediga platser
+      // Räkna ut lediga platser - använd 0 som default om capacity saknas
+      const capacity = event.capacity || 0;
       const bookedCount = (event.attendees?.length || 0);
-      const availableSpots = event.capacity - bookedCount;
+      const availableSpots = capacity - bookedCount;
 
       // Bestäm vilket fält att lägga till i
       const field = availableSpots > 0 ? "attendees" : "waitlist";

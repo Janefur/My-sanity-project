@@ -1,8 +1,14 @@
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import './Carousel.css';
+import { Link } from 'react-router-dom';
+import { SiGooglemaps } from "react-icons/si";
+import { MdDateRange } from "react-icons/md";
+
+
 
 function Carousel({ carousel }) {
-  const [currentIndex, setCurrentIndex] = useState(0);
+  const trackRef = useRef(null);
+  const containerRef = useRef(null);
 
   // Fallback för olika data-strukturer
   let photo = [];
@@ -14,15 +20,17 @@ function Carousel({ carousel }) {
     title = carousel.title;
   } else if (carousel?.events && carousel.events.length > 0) {
     // Struktur med events array - konvertera till image format
-  photo = carousel.events
-      .filter(event => event !== null && event !== undefined)
-      .map(event => ({
-        imageUrl: event.imageUrl,
-        alt: event.name,
-        caption: event.name,
-        location: event.location,
-        date: event.date
-      }));
+    photo = carousel.events
+  .filter(event => event)
+  .map(event => ({
+    imageUrl: event.imageUrl,
+    alt: event.name,
+    caption: event.name,
+    location: event.location,
+    date: event.date,
+    slug: event.slug,      
+    _id: event._id,
+  }));
     title = carousel.title;
   } else if (carousel?.photo) {
     // Struktur med photo array
@@ -33,69 +41,42 @@ function Carousel({ carousel }) {
     photo = carousel;
   }
 
-
+  // Early return
   if (!photo || photo.length === 0) {
     return <div>Inga carousel-bilder att visa. Data: {JSON.stringify(carousel)}</div>;
   }
 
-  const nextPhoto = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === photo.length - 1 ? 0 : prevIndex + 1
-    );
-  };
 
-  const prevPhoto = () => {
-    setCurrentIndex((prevIndex) =>
-      prevIndex === 0 ? photo.length - 1 : prevIndex - 1
-    );
-  };
-
-  const goToSlide = (index) => {
-    setCurrentIndex(index);
-  };
 
   return (
     <div className="carousel">
-      {title && (
-        <h3 className="carousel-title">{title}</h3>
-      )}
-
-
+      {title && <h3 className="carousel-title">{title}</h3>}
       <div className="carousel-container">
-        <button className="carousel-btn prev" onClick={prevPhoto}>
-          ‹
-        </button>
-
-        <div className="carousel-slide">
-          <img
-            src={photo[currentIndex].imageUrl}
-            alt={photo[currentIndex].alt || `Slide ${currentIndex + 1}`}
-          />
-          {photo[currentIndex].caption && (
-            <div className="">
-              <p>{photo[currentIndex].caption}</p>
-              <p>{photo[currentIndex].location}</p>
-              <p>{photo[currentIndex].date}</p>
-            </div>
-          )}
+        <div ref={containerRef} className="carousel-track-container">
+          <div ref={trackRef} className="carousel-track">
+            {photo.map((event, index) => (
+              <div key={index} className="carousel-slide">
+                   <Link 
+                    key={event._id} 
+                    to={`/events/${event.slug?.current}`}
+                    className="event-link"
+                    >
+                  <img
+                    className="carousel-image"
+                    src={event.imageUrl}
+                    alt={event.alt || `Slide ${index + 1}`}
+                  />
+                  <div className="carousel-caption">
+                    <p className="caption-name">{event.caption}</p>
+                    {event.location && <p className="caption-location"> <SiGooglemaps /> {event.location}</p>}
+                    {event.date && <p className="caption-date"> <MdDateRange /> {new Date(event.date).toLocaleDateString('sv-SE')}</p>}
+                  </div>
+                </Link>
+              </div>
+            ))}
+          </div>
         </div>
-
-        <button className="carousel-btn next" onClick={nextPhoto}>
-          ›
-        </button>
       </div>
-
-      {photo.length > 1 && (
-        <div className="carousel-dots">
-          {photo.map((_, index) => (
-            <button
-              key={index}
-              className={`dot ${index === currentIndex ? 'active' : ''}`}
-              onClick={() => goToSlide(index)}
-            />
-          ))}
-        </div>
-      )}
     </div>
   );
 }
