@@ -1,0 +1,76 @@
+.event-footer {
+  background: linear-gradient(#a01a7d, #5b1048);
+  color: #fefbfd;
+  padding: 20px;
+  text-align: center;
+  width: 100%;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+}
+textarea {
+  font-family: Arial, Helvetica, sans-serif;
+}
+.create-event-container {
+  color: #5b1048;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  width: 100%;
+  padding-bottom: 200px; /* To ensure content is not hidden behind the footer */
+}
+
+.create-form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  width: 300px;
+  color: #5b1048;
+}
+
+.create-form button {
+  background: linear-gradient(135deg, #a01a7d 0%, #8b1569 100%) !important;
+  color: white !important;
+  padding: 12px 24px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 20px;
+  box-shadow: 0 4px 6px rgba(160, 26, 125, 0.2);
+  transition: all 0.3s ease;
+}
+
+.create-form input {
+  border: #5b1048 solid;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.create-form textarea {
+  border: #5b1048 solid;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.image-upload {
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.image-upload input[type="file"]::file-selector-button {
+  background: linear-gradient(135deg, #a01a7d 0%, #8b1569 100%);
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}

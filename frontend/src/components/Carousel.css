@@ -41,6 +41,7 @@
 
 .carousel-caption p {
   margin: 5px 0;
+  color: #333 !important;
 }
 
 .caption-name {
@@ -60,7 +61,7 @@
   .carousel-slide {
     flex: 0 0 280px;
   }
-  
+
   .carousel-image {
     height: 200px;
   }
@@ -74,7 +75,7 @@
   .carousel-slide {
     flex: 0 0 250px;
   }
-  
+
   .carousel-image {
     height: 180px;
   }

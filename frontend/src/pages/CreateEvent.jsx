@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sanityQueries } from "../sanityQueries";
 import ImageUpload from "../components/Imageuploader.jsx";
+import { IoReturnUpBackOutline } from "react-icons/io5";
+import "../pages/CreateEvent.css";
 
 export default function CreateEvent() {
   const [image, setImage] = useState(null);
@@ -29,7 +31,7 @@ export default function CreateEvent() {
     const name = fields.name && fields.name.trim().toLowerCase();
     if (!name) return setIsDuplicate(false);
     const found = posts.some(
-      (p) => (p.name || "").trim().toLowerCase() === name
+      (p) => (p.name || "").trim().toLowerCase() === name,
     );
     setIsDuplicate(found);
   }, [fields.name, posts]);
@@ -76,10 +78,10 @@ export default function CreateEvent() {
   };
 
   return (
-    <div>
+    <div className="create-event-container">
       <h1>Skapa ett event</h1>
       <div>
-        <form onSubmit={handleSubmit}>
+        <form className="create-form" onSubmit={handleSubmit}>
           <label>Namn på event:</label>
           <input
             type="text"
@@ -114,21 +116,27 @@ export default function CreateEvent() {
           <label>Beskrivning:</label>
           <textarea
             placeholder="Skriv beskrivning för event"
+            rows={5}
             name="description"
             value={fields.description}
             onChange={handleChange}
           ></textarea>
 
-          <ImageUpload onImageSelect={setImage} />
+          <ImageUpload
+            className="image-upload"
+            style={{ width: "200px" }}
+            onImageSelect={setImage}
+          />
 
           <br />
           <button type="submit">Lägg till</button>
         </form>
       </div>
-      <footer>
-        <button onClick={() => navigate(-1)}>
-          Gå tillbaka till startsidan
-        </button>
+      <footer className="event-footer">
+        <div onClick={() => navigate(-1)}>
+          <IoReturnUpBackOutline size={30} />
+          <p>Tillbaka</p>
+        </div>
       </footer>
     </div>
   );

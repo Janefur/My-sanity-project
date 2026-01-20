@@ -1,0 +1,18 @@
+.footer {
+  background: linear-gradient(#a01a7d, #5b1048);
+  padding: 20px;
+  text-align: center;
+  width: 100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: auto;
+}
+
+.footer button {
+  width: 150px;
+}
+p {
+  color: #fefbfd !important;
+}

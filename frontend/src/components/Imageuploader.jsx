@@ -28,7 +28,7 @@ function ImageUpload({ onImageSelect, initialImage }) {
   }
 
   return (
-    <div>
+    <div className="image-upload">
       <p style={{ fontWeight: "bold" }}>
         Ladda upp en bild för ditt event (valfritt):
       </p>

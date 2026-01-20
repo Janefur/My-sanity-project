@@ -2,14 +2,14 @@
   max-width: 800px;
   margin: 0 auto;
   padding: 20px;
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
 }
 
 .single-event h1 {
-  color: #5B1048 !important;
+  color: #5b1048 !important;
   margin-bottom: 20px;
   font-size: 2.5rem;
-  border-bottom: 3px solid #A01A7D;
+  border-bottom: 3px solid #a01a7d;
   padding-bottom: 10px;
 }
 
@@ -22,11 +22,11 @@
   margin: 10px 0;
   font-size: 1.1rem;
   line-height: 1.6;
-  color: #666;
+  color: #666 !important;
 }
 
 .show-more-button {
-  color: #5B1048 !important;
+  color: #5b1048 !important;
   background: transparent;
   border: none;
   cursor: pointer;
@@ -41,7 +41,7 @@
 }
 
 .booking-button {
-  background: linear-gradient(135deg, #A01A7D 0%, #8B1569 100%) !important;
+  background: linear-gradient(135deg, #a01a7d 0%, #8b1569 100%) !important;
   color: white !important;
   padding: 12px 24px;
   cursor: pointer;
@@ -55,7 +55,7 @@
 }
 
 .booking-button:hover {
-  background: linear-gradient(135deg, #5B1048 0%, #4A0D3A 100%) !important;
+  background: linear-gradient(135deg, #5b1048 0%, #4a0d3a 100%) !important;
   box-shadow: 0 4px 8px rgba(91, 16, 72, 0.4);
   transform: translateY(-1px);
 }
@@ -71,14 +71,11 @@
 }
 
 .booking-button.waitlist {
-  outline: 2px solid #F30E0E !important;
+  outline: 2px solid #f30e0e !important;
   background: transparent !important;
   background-color: transparent !important;
-  color: #F30E0E !important;
+  color: #f30e0e !important;
 }
-
-
-
 
 .booking-status {
   margin-top: 15px;
@@ -91,11 +88,11 @@
 }
 
 .booking-status.booked {
-  color: #A01A7D !important;
+  color: #a01a7d !important;
 }
 
 .booking-status.waitlist {
-  color: #F30E0E !important;
+  color: #f30e0e !important;
 }
 
 .login-message {
@@ -110,7 +107,7 @@
   height: 250px;
   margin-top: 20px;
   border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Responsive design */
@@ -118,15 +115,14 @@
   .single-event {
     margin: 0 16px;
   }
-  
+
   .single-event h1 {
     font-size: 2rem;
   }
-  
+
   .booking-button {
     width: 100%;
     min-height: 48px;
     padding: 14px 24px;
   }
-
 }
