@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { sanityQueries } from "../sanityQueries";
 import './Filter.css';
+import { SiGooglemaps } from "react-icons/si";
+import { MdDateRange } from "react-icons/md";
 
 export async function getEventsByTags(filters, language = "sv") {
   try {
@@ -19,7 +21,7 @@ export async function getEventsByTags(filters, language = "sv") {
     return [];
   }
 }
-function Filter({ event, showAllTags = false, language = "sv", events }) {
+function Filter({ event, showAllTags = false, language = "sv", events, isSearching = false, onFilterChange }) {
   const [allEvents, setAllEvents] = useState([]);
   const [loading, setLoading] = useState(false);
   const [selectedTag, setSelectedTag] = useState(null);
@@ -51,11 +53,21 @@ function Filter({ event, showAllTags = false, language = "sv", events }) {
     }
   }, [showAllTags, language, events]);
 
+  // Återställ selectedTag när någon börjar söka
+  useEffect(() => {
+    if (isSearching) {
+      setSelectedTag(null);
+      setTaggedEvents([]);
+      if (onFilterChange) onFilterChange(false);
+    }
+  }, [isSearching, onFilterChange]);
+
   // Hantera tag-klick
   const handleTagClick = async (tag) => {
     if (selectedTag === tag) {
       setSelectedTag(null);
       setTaggedEvents([]);
+      if (onFilterChange) onFilterChange(false);
       return;
     }
 
@@ -63,8 +75,11 @@ function Filter({ event, showAllTags = false, language = "sv", events }) {
     try {
       const fetchedEvents = await sanityQueries.getEventsByTag(tag, language);
       setTaggedEvents(fetchedEvents);
+      // Sätt isFiltering till true bara om vi faktiskt har resultat
+      if (onFilterChange) onFilterChange(fetchedEvents.length > 0);
     } catch (error) {
       console.error('Error fetching events by tag:', error);
+      if (onFilterChange) onFilterChange(false);
     }
   };
 
@@ -99,7 +114,7 @@ function Filter({ event, showAllTags = false, language = "sv", events }) {
     
     return (
       <div className="all-tags">
-        <h3>Tillgängliga kategorier:</h3>
+        <h3>Filtera på kategorier</h3>
         <div className="tags-container">
           {allTags.map(tag => (
             <button 
@@ -113,9 +128,9 @@ function Filter({ event, showAllTags = false, language = "sv", events }) {
         </div>
         
         {/* Visa events för vald tag */}
-        {selectedTag && taggedEvents.length > 0 && (
+        {selectedTag && taggedEvents.length > 0 && !isSearching && (
           <div className="tagged-events">
-            <h4>Events för "{selectedTag}":</h4>
+            <h4>{selectedTag}</h4>
             <div className="events-list">
               {taggedEvents.map(event => (
                 <Link 
@@ -125,8 +140,8 @@ function Filter({ event, showAllTags = false, language = "sv", events }) {
                 >
                   <div className="event-preview">
                     <h5>{event.name}</h5>
-                    <p>📍 {event.location}</p>
-                    <p>📅 {new Date(event.date).toLocaleDateString()}</p>
+                    <p> <SiGooglemaps /> {event.location}</p>
+                    <p> <MdDateRange /> {new Date(event.date).toLocaleDateString()}</p>
                   </div>
                 </Link>
               ))}

@@ -9,7 +9,12 @@ function SingleEvent({ language = "sv", currentUser }) {
   const [loading, setLoading] = useState(true);
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingStatus, setBookingStatus] = useState(null); // "attendees" eller "waitlist"
+const [isExpanded, setIsExpanded] = useState(false);
 
+const maxLength = 200; // Antal tecken att visa
+const description = event?.description || '';
+const shouldShowButton = description.length > maxLength;
+const displayText = isExpanded ? description : description.slice(0, maxLength);
   useEffect(() => {
     const fetchEvent = async () => {
       if (slug) {
@@ -99,72 +104,69 @@ function SingleEvent({ language = "sv", currentUser }) {
 
   return (
     <div className="single-event">
-      <h1>{eventName}</h1>
-      <div className="event-details">
-        {language === "sv" ? (
-          <>
-            <p><strong>📍 Plats:</strong> {event.location}</p>
-            <p><strong>📅 Datum:</strong> {new Date(event.date).toLocaleDateString()}</p>
-            {eventDescription && <p><strong>Beskrivning:</strong> {eventDescription}</p>}
-            <p>🎫 Platser kvar: {isFull ? 'Fullbokad' : availableSpots}</p>
-          </>
-        ) : (
-          <>
-            <p><strong>📍 Location:</strong> {event.location}</p>
-            <p><strong>📅 Date:</strong> {new Date(event.date).toLocaleDateString()}</p>
-            {eventDescription && <p><strong>Description:</strong> {eventDescription}</p>}
-            <p>🎫 Spots left: {isFull ? 'Fullbokad' : availableSpots}</p>
-          </>
-        )
-        }
-        {event.tags && event.tags.length > 0 && language === "sv" ? (
-          <div className="event-tags">
-            <strong>Kategorier:</strong>
-            <div className="tags-container">
-              {event.tags.map(tag => (
-                <span key={tag} className="tag">{tag}</span>
-              ))}
-            </div>
-          </div>
-        ) : (<div className="event-tags">
-            <strong>Categories:</strong>
-            <div className="tags-container">
-              {event.tags.map(tag => (
-                <span key={tag} className="tag">{tag}</span>
-              ))}
-            </div>
-          </div>)}
-
-        {event.imageUrl && (
+         {event.imageUrl && (
           <img
             src={event.imageUrl}
             alt={eventName}
             className="event-image"
           />
         )}
+      <h1>{eventName}</h1>
+      <div className="event-details">
+        
+        {language === "sv" ? (
+          <>
+            <p><strong>Plats:</strong> {event.location}</p>
+            <p><strong>Datum:</strong> {new Date(event.date).toLocaleDateString()}</p>
+            <p><strong>Platser kvar:</strong> {isFull ? 'Fullbokad' : availableSpots}</p>
+
+            <p>{displayText}{!isExpanded && shouldShowButton && '...'}</p>
+            {shouldShowButton && (
+              <button className="show-more-button" onClick={() => setIsExpanded(!isExpanded)}>
+                {isExpanded ? 'Visa mindre' : 'Visa mer'}
+              </button>
+            )}
+
+          </>
+        ) : (
+          <>
+            <p><strong>Location:</strong> {event.location}</p>
+            <p><strong>Date:</strong> {new Date(event.date).toLocaleDateString()}</p>
+            <p><strong>Available Spots:</strong> {isFull ? 'Fully Booked' : availableSpots}</p>
+
+            <p>{displayText}{!isExpanded && shouldShowButton && '...'}</p>
+            {shouldShowButton && (
+              <button className="show-more-button" onClick={() => setIsExpanded(!isExpanded)}>
+                {isExpanded ? 'Show less' : 'Show more'}
+              </button>
+            )}
+          </>
+        )
+        }
+     
+
+     
       </div>
 
       {/* Bokningsknapp */}
-      {currentUser && !hasBooked &&(
+      {currentUser && !hasBooked && (
         <button
           onClick={handleBooking}
           disabled={bookingLoading}
-          style={{
-            background: isFull ? 'orange' : 'green',
-            color: 'white',
-            padding: '10px 20px',
-            cursor: 'pointer',
-            border: 'none',
-            borderRadius: '5px',
-            fontSize: '16px'
-          }}
+          className={`booking-button ${isFull ? 'waitlist' : ''}`}
         >
           {bookingLoading ? 'Bokar...' : (isFull ? 'Väntelista' : 'Boka in dig på event')}
         </button>
       )}
 
-            {hasBooked && <p style={{color: isOnWaitlist ? 'orange' : 'green'}}>{isOnWaitlist ? 'Du står på väntelistan' : 'Bokad!'}</p>}
-      {!currentUser && <p>Logga in för att boka</p>}
+      {hasBooked && (
+        <p className={`booking-status ${isOnWaitlist ? 'waitlist' : 'booked'}`}>
+          {isOnWaitlist ? 'Du står på väntelistan' : 'Bokad'}
+        </p>
+      )}
+      
+      {!currentUser && <p className="login-message">Logga in för att boka</p>}
+
 
     </div>
   );

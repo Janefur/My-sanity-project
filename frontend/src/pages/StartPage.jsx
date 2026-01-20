@@ -9,6 +9,8 @@ import './StartPage.css';
 function StartPage({ language, events, pages }) {
     const [post, setPost] = useState(null);
     const [loggedInUser, setLoggedInUser] = useState(null);
+    const [isSearching, setIsSearching] = useState(false);
+    const [isFiltering, setIsFiltering] = useState(false);
 
     const handleLogin = (user) => {
       setLoggedInUser(user);
@@ -41,8 +43,8 @@ function StartPage({ language, events, pages }) {
             : post.title
         )}
       </h2>
-      <Searchbar language={language} />
-      <Filter showAllTags={true} language={language} events={events} />
+      <Searchbar language={language} onSearchChange={setIsSearching} isFiltering={isFiltering} />
+      <Filter showAllTags={true} language={language} events={events} isSearching={isSearching} onFilterChange={setIsFiltering} />
       {post?.body?.length > 0 ? (
         post.body.map((block, index) => {
           if (block._type === "block") {

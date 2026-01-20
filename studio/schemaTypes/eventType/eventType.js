@@ -68,6 +68,7 @@ export const eventType = {
       type: 'array',
       of: [{type: 'string'}],
       options: {
+        
         layout: 'tags',
       },
     },

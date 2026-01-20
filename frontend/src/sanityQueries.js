@@ -17,7 +17,8 @@ export const queries = {
         "imageUrl": photo.asset->url,
         "description": coalesce(description.${language}, description),
         location,
-        date
+        date,
+        slug
       }
     }
   }`,

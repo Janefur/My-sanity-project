@@ -1,7 +1,9 @@
-import { useState} from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { sanityQueries } from "../sanityQueries";
 import './Searchbar.css';
+import { SiGooglemaps } from "react-icons/si";
+import { MdDateRange } from "react-icons/md";
 
 export async function getSearchResults(query, language = "sv") {
   try {
@@ -31,9 +33,7 @@ export async function getSearchResults(query, language = "sv") {
 
 // React komponent för sökresultat
 export function SearchResults({ filteredEvents }) {
-  if (!filteredEvents || filteredEvents.length === 0) {
-    return <div className="no-results">Inga events hittades</div>;
-  }
+
 
   return (
     <div className="search-results">
@@ -45,8 +45,8 @@ export function SearchResults({ filteredEvents }) {
         >
           <div className="search-result">
             <h4>{event.name}</h4>
-            <p><strong>Plats:</strong> {event.location}</p>
-            <p>Datum: {event.date}</p>
+            <p><strong><SiGooglemaps /> Plats:</strong> {event.location}</p>
+            <p><MdDateRange /> Datum: {new Date(event.date).toLocaleDateString()}</p>
           </div>
         </Link>
       ))}
@@ -55,14 +55,24 @@ export function SearchResults({ filteredEvents }) {
 }
 
 // Huvudkomponent för sökfunktionen
-function Searchbar({ language = "sv" }) {
+ function Searchbar({ language = "sv", onSearchChange, isFiltering = false }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // Rensa sökfältet när någon börjar filtrera
+  useEffect(() => {
+    if (isFiltering) {
+      setQuery('');
+      setResults([]);
+      if (onSearchChange) onSearchChange(false);
+    }
+  }, [isFiltering, onSearchChange]);
+
   const handleSearch = async (searchQuery) => {
     if (!searchQuery.trim()) {
       setResults([]);
+      if (onSearchChange) onSearchChange(false);
       return;
     }
 
@@ -70,9 +80,12 @@ function Searchbar({ language = "sv" }) {
     try {
       const searchResults = await getSearchResults(searchQuery, language);
       setResults(searchResults);
+      // Sätt isSearching till true bara om vi faktiskt har resultat
+      if (onSearchChange) onSearchChange(searchResults.length > 0);
     } catch (error) {
       console.error('Search error:', error);
       setResults([]);
+      if (onSearchChange) onSearchChange(false);
     } finally {
       setIsLoading(false);
     }
@@ -99,10 +112,8 @@ function Searchbar({ language = "sv" }) {
           placeholder="Sök efter events..."
           className="search-input"
         />
-        {isLoading && <div className="loading">Söker...</div>}
+        {query && results.length > 0 && !isFiltering && <SearchResults filteredEvents={results} />}
       </div>
-
-      {query && <SearchResults filteredEvents={results} />}
     </div>
   );
 }
