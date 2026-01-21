@@ -2,7 +2,7 @@
   background: linear-gradient(#a01a7d, #5b1048);
   padding: 20px;
   text-align: center;
-  width: 100vw;
+  max-width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
