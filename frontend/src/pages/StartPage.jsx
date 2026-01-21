@@ -6,18 +6,13 @@ import { useEffect, useState } from "react";
 import { sanityQueries } from "../sanityQueries";
 import './StartPage.css';
 
-function StartPage({ language, events, pages }) {
+function StartPage({ language, events, pages, currentUser }) {
     const [post, setPost] = useState(null);
-    const [loggedInUser, setLoggedInUser] = useState(null);
     const [isSearching, setIsSearching] = useState(false);
     const [isFiltering, setIsFiltering] = useState(false);
 
-    const handleLogin = (user) => {
-      setLoggedInUser(user);
-    };
-    const handleLogout = () => {
-      setLoggedInUser(null);
-    };
+
+
 
     useEffect(() => {
       // Om pages prop finns, använd den istället för att hämta
@@ -37,12 +32,11 @@ function StartPage({ language, events, pages }) {
   return (
     <div className="start-page">
     <h2>
-        {post?.title && (
-          loggedInUser 
-            ? post.title.replace("användare", loggedInUser.username)
-            : post.title
-        )}
-      </h2>
+      {currentUser
+        ? `Hej ${currentUser.username}`
+        : (Array.isArray(post) ? post[0]?.title : post?.title)
+      }
+    </h2>
       <Searchbar language={language} onSearchChange={setIsSearching} isFiltering={isFiltering} />
       <Filter showAllTags={true} language={language} events={events} isSearching={isSearching} onFilterChange={setIsFiltering} />
       {post?.body?.length > 0 ? (

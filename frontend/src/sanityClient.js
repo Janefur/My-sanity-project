@@ -6,5 +6,5 @@ export const sanityClient = createClient({
   useCdn: false, // inaktivera CDN för utveckling
   apiVersion: "2023-01-01",
   token: process.env.REACT_APP_SANITY_READ_TOKEN, // Read-only token för drafts
-  perspective: 'previewDrafts', // Visa både drafts och publicerade
+  perspective: 'drafts', // Visa både drafts och publicerade
 });
