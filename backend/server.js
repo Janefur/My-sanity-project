@@ -92,6 +92,45 @@ app.get("/api/health", (req, res) => {
    res.json({ status: "OK", message: "Backend server is running" });
 });
 
+app.post("/api/cancel-booking", async (req, res) => {
+   try {
+      const { eventId, userName } = req.body;
+
+      if (!eventId || !userName) {
+         return res.status(400).json({ error: "eventId och userName krävs" });
+      }
+
+      // Hämta eventet först
+      const event = await sanityClient.getDocument(eventId);
+
+      if (!event) {
+         return res.status(404).json({ error: "Event hittades inte" });
+      }
+
+      // Ta bort userName från både attendees och waitlist
+let unsetPaths = [];
+   const attendeeIndex = event.attendees?.indexOf(userName);
+   const waitlistIndex = event.waitlist?.indexOf(userName);
+
+   if (attendeeIndex > -1) {
+  unsetPaths.push(`attendees[${attendeeIndex}]`);
+   }
+   if (waitlistIndex > -1) {
+  unsetPaths.push(`waitlist[${waitlistIndex}]`);
+   }
+
+const updated = await sanityClient
+  .patch(eventId)
+  .unset(unsetPaths)
+  .commit();
+
+      res.json({ success: true, event: updated });
+   } catch (error) {
+      console.error("Cancel booking error:", error);
+      res.status(500).json({ error: "Kunde inte avboka: " + error.message });
+   }
+});
+
 // Enkel booking endpoint
 app.post("/api/book-event", async (req, res) => {
    try {

@@ -49,16 +49,12 @@
   border-radius: 5px;
   font-size: 16px;
   font-weight: 600;
-  margin-top: 20px;
+  margin-top: 10px;
   box-shadow: 0 4px 6px rgba(160, 26, 125, 0.2);
   transition: all 0.3s ease;
 }
 
-.booking-button:hover {
-  background: linear-gradient(135deg, #5b1048 0%, #4a0d3a 100%) !important;
-  box-shadow: 0 4px 8px rgba(91, 16, 72, 0.4);
-  transform: translateY(-1px);
-}
+
 
 .booking-button:active {
   transform: translateY(0);
@@ -75,6 +71,30 @@
   background: transparent !important;
   background-color: transparent !important;
   color: #f30e0e !important;
+}
+
+
+
+.cancel-button {
+  background-color: #C80C0C !important;
+  color: white !important;
+  padding: 12px 24px;
+  cursor: pointer;
+  border: none;
+  width: 100%;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: 10px;
+  box-shadow: 0 4px 6px rgba(160, 26, 125, 0.2);
+  transition: all 0.3s ease;
+
+}
+
+
+.cancel-button:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(91, 16, 72, 0.3);
 }
 
 .booking-status {

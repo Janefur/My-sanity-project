@@ -17,7 +17,9 @@ const maxLength = 200; // Antal tecken att visa
 const description = event?.description || '';
 const shouldShowButton = description.length > maxLength;
 const displayText = isExpanded ? description : description.slice(0, maxLength);
-  useEffect(() => {
+ 
+
+useEffect(() => {
     const fetchEvent = async () => {
       if (slug) {
         try {
@@ -39,6 +41,7 @@ const displayText = isExpanded ? description : description.slice(0, maxLength);
       alert('Du måste vara inloggad för att boka!');
       return;
     }
+
 
     // Extra koll för att förhindra dubbelbokning
     const alreadyAttending = event.attendees?.includes(currentUser.username);
@@ -71,19 +74,41 @@ const displayText = isExpanded ? description : description.slice(0, maxLength);
         setEvent(updatedEvent);
 
         if (data.status === 'attendees') {
-          alert('Bokning lyckades! 🎉');
+          console.log('Bokning lyckades! 🎉');
         } else if (data.status === 'waitlist') {
-          alert('Du är tillagd på väntelistan 📝');
+          console.log('Du är tillagd på väntelistan 📝');
         }
       } else {
-        alert(data.error);
+        console.error(data.error);
       }
     } catch (error) {
-      alert('Kunde inte boka');
+      console.error('Kunde inte boka:', error);
     } finally {
       setBookingLoading(false);
     }
   };
+
+    const handleCancelBooking = async () => {
+try {
+      const response = await fetch('http://localhost:3001/api/cancel-booking', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          eventId: event._id,
+          userName: currentUser.username
+        })
+      })
+
+      const data = await response.json();
+    } catch (error) {
+      console.error('Kunde inte avboka:', error);
+    } finally {
+      // Hämta uppdaterad data från Sanity
+      const updatedEvent = await sanityQueries.getEventBySlug(slug, language);
+      setEvent(updatedEvent);
+    }
+  }
+  
 
   if (loading) {
     return <div className="single-event">Laddar event...</div>;
@@ -167,9 +192,17 @@ const displayText = isExpanded ? description : description.slice(0, maxLength);
       )}
 
       {hasBooked && (
-        <p className={`booking-status ${isOnWaitlist ? 'waitlist' : 'booked'}`}>
-          {isOnWaitlist ? 'Du står på väntelistan' : 'Bokad'}
-        </p>
+          <p className={`booking-status ${isOnWaitlist ? 'waitlist' : 'booked'}`}>
+            {isOnWaitlist ? 'Du står på väntelistan' : 'Bokad'}
+          </p>
+      )}
+      {hasBooked && (
+          <button
+            onClick={handleCancelBooking}
+            className="cancel-button"
+          >
+            Avboka
+          </button>
       )}
 
       {!currentUser && <p className="login-message">Logga in för att boka</p>}
