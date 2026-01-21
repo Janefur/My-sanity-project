@@ -57,7 +57,10 @@ app.post("/api/create-event", async (req, res) => {
       // Skapa event-dokument
       const doc = {
          _type: "event",
-         name: name.trim(),
+         name: {
+            sv: name.sv?.trim() || "",
+            en: name.en?.trim() || ""
+         },
          date,
          location: location.trim(),
          description: description?.trim() || "",

@@ -31,14 +31,12 @@ function StartPage({ language, events, pages, currentUser }) {
 
   return (
     <div className="start-page">
-    <h2>
+    <h2 className="start-page-greeting">
       {currentUser
         ? `Hej ${currentUser.username}`
         : (Array.isArray(post) ? post[0]?.title : post?.title)
       }
     </h2>
-      <Searchbar language={language} onSearchChange={setIsSearching} isFiltering={isFiltering} />
-      <Filter showAllTags={true} language={language} events={events} isSearching={isSearching} onFilterChange={setIsFiltering} />
       {post?.body?.length > 0 ? (
         post.body.map((block, index) => {
           if (block._type === "block") {
@@ -53,6 +51,9 @@ function StartPage({ language, events, pages, currentUser }) {
       ) : (
         <p>Inget innehåll tillgängligt</p>
       )}
+      <Searchbar language={language} onSearchChange={setIsSearching} isFiltering={isFiltering} />
+      <Filter showAllTags={true} language={language} events={events} isSearching={isSearching} onFilterChange={setIsFiltering} />
+    
       {post?.carousel && post.carousel.length > 0 && (
         <Carousel carousel={post.carousel[0]} />
       )}

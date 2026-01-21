@@ -89,3 +89,25 @@ textarea {
   font-weight: 500;
   cursor: pointer;
 }
+
+.modal-confirmation-overlay {
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    padding-top: 150px;
+    z-index: 1000;
+    max-width: 100%;
+    height: 100%;
+}
+
+.modal-confirmation-content {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    width: 90%;
+    z-index: 1001;
+}

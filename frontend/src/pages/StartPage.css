@@ -5,10 +5,14 @@
   font-family: "Arial", sans-serif;
 }
 
-.start-page h2 {
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 2rem;
+
+.start-page-greeting {
+  font-weight: bold;
+  color: #5b1048;
+  justify-content: center;
+  display: flex;
+    font-size: 2rem;
+
 }
 
 .start-page p {

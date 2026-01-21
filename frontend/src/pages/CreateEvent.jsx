@@ -4,6 +4,7 @@ import { sanityQueries } from "../sanityQueries";
 import ImageUpload from "../components/Imageuploader.jsx";
 import { IoIosArrowRoundBack } from "react-icons/io";
 import "../pages/CreateEvent.css";
+import {FaRegCircleCheck} from 'react-icons/fa6';
 
 export default function CreateEvent() {
   const [image, setImage] = useState(null);
@@ -17,6 +18,16 @@ export default function CreateEvent() {
     description: "",
   });
   const [isDuplicate, setIsDuplicate] = useState(false);
+  const [hasCreated, setHasCreated] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  useEffect(() => {
+  if (isModalOpen && hasCreated) {
+    const timer = setTimeout(() => {
+      setIsModalOpen(false);
+    }, 2000);
+    return () => clearTimeout(timer);
+  }
+}, [isModalOpen, hasCreated]);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -54,7 +65,7 @@ export default function CreateEvent() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          name: fields.name,
+          name: { sv: fields.name, en: fields.name },
           date: fields.date,
           location: fields.location,
           description: fields.description,
@@ -70,15 +81,28 @@ export default function CreateEvent() {
       }
 
       setFields({ name: "", date: "", location: "", description: "" });
-      alert("Event skapat!");
+
     } catch (err) {
       console.error("Backend API error:", err);
       alert(`Kunde inte skapa event: ${err.message}`);
     }
+    setHasCreated(true);
   };
 
   return (
     <div className="create-event-container">
+     {isModalOpen && hasCreated && (
+         <div className="modal-confirmation-overlay">
+           <div className="modal-confirmation-content">
+             <div className="modal-confirmation-header">
+             </div>
+             <div className="modal-confirmation-body">
+                <h2>Event Skapat</h2>
+                <FaRegCircleCheck size={50} style={{ color: "green" }} />
+             </div>
+           </div>
+         </div>
+       )}
       <h1>Skapa ett event</h1>
       <div>
         <form className="create-form" onSubmit={handleSubmit}>
@@ -129,9 +153,10 @@ export default function CreateEvent() {
           />
 
           <br />
-          <button type="submit">Lägg till</button>
+          <button type="submit" onClick={() => setIsModalOpen(true)}>Lägg till</button>
         </form>
       </div>
+     
       <footer className="event-footer">
         <div onClick={() => navigate(-1)}>
           <IoIosArrowRoundBack size={40} />
