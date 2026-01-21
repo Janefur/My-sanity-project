@@ -110,6 +110,22 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+.back-container {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.back-text {
+  display: inline-block;
+  color: #5b1048 !important;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+}
+
 /* Responsive design */
 @media (max-width: 768px) {
   .single-event {
@@ -125,4 +141,6 @@
     min-height: 48px;
     padding: 14px 24px;
   }
+
+
 }

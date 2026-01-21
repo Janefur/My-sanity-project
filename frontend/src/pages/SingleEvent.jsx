@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { sanityQueries } from "../sanityQueries";
 import './SingleEvent.css';
+import { IoIosArrowRoundBack } from "react-icons/io";
+import { useNavigate } from "react-router-dom";
 
 function SingleEvent({ language = "sv", currentUser }) {
   const { slug } = useParams();
@@ -10,7 +12,7 @@ function SingleEvent({ language = "sv", currentUser }) {
   const [bookingLoading, setBookingLoading] = useState(false);
   const [bookingStatus, setBookingStatus] = useState(null); // "attendees" eller "waitlist"
 const [isExpanded, setIsExpanded] = useState(false);
-
+const navigate = useNavigate();
 const maxLength = 200; // Antal tecken att visa
 const description = event?.description || '';
 const shouldShowButton = description.length > maxLength;
@@ -41,7 +43,7 @@ const displayText = isExpanded ? description : description.slice(0, maxLength);
     // Extra koll för att förhindra dubbelbokning
     const alreadyAttending = event.attendees?.includes(currentUser.username);
     const alreadyOnWaitlist = event.waitlist?.includes(currentUser.username);
-    
+
     if (alreadyAttending || alreadyOnWaitlist) {
       alert('Du har redan bokat detta event!');
       return;
@@ -63,7 +65,7 @@ const displayText = isExpanded ? description : description.slice(0, maxLength);
 
       if (response.ok) {
         setBookingStatus(data.status); // "attendees" eller "waitlist"
-        
+
         // Hämta uppdaterad data från Sanity
         const updatedEvent = await sanityQueries.getEventBySlug(slug, language);
         setEvent(updatedEvent);
@@ -103,7 +105,12 @@ const displayText = isExpanded ? description : description.slice(0, maxLength);
   const isFull = availableSpots <= 0;
 
   return (
+
     <div className="single-event">
+      <div onClick={() => navigate(-1)} className="back-container">
+                <IoIosArrowRoundBack size={30} />
+                <p className="back-text">Tillbaka</p>
+              </div>
          {event.imageUrl && (
           <img
             src={event.imageUrl}
@@ -113,7 +120,7 @@ const displayText = isExpanded ? description : description.slice(0, maxLength);
         )}
       <h1>{eventName}</h1>
       <div className="event-details">
-        
+
         {language === "sv" ? (
           <>
             <p><strong>Plats:</strong> {event.location}</p>
@@ -143,9 +150,9 @@ const displayText = isExpanded ? description : description.slice(0, maxLength);
           </>
         )
         }
-     
 
-     
+
+
       </div>
 
       {/* Bokningsknapp */}
@@ -164,7 +171,7 @@ const displayText = isExpanded ? description : description.slice(0, maxLength);
           {isOnWaitlist ? 'Du står på väntelistan' : 'Bokad'}
         </p>
       )}
-      
+
       {!currentUser && <p className="login-message">Logga in för att boka</p>}
 
 

@@ -19,8 +19,9 @@
 }
 
 .tag {
-  background: linear-gradient(135deg, #a01a7d 0%, #8b1569 100%) !important;
-  color: white !important;
+  outline: 2px solid #5b1048 !important;
+  background: transparent !important;
+  color: #5b1048 !important;
   padding: 8px 16px !important;
   border-radius: 5px !important;
   font-size: 14px;
@@ -33,12 +34,12 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 4px 6px rgba(160, 26, 125, 0.2);
   letter-spacing: 0.3px;
   text-transform: capitalize;
 }
 
 .tag.active {
+  color: #e9ecef !important;
   background: linear-gradient(135deg, #5b1048 0%, #4a0d3a 100%) !important;
   box-shadow: 0 4px 8px rgba(91, 16, 72, 0.4);
   transform: scale(1.02);

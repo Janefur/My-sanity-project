@@ -47,10 +47,16 @@ function Navbar({
 
   return (
     <div className="NavBar">
+      <div className="options-container">
       <Login onLogin={onLogin} onLogout={onLogout} loggedInUser={currentUser} />
-      <img src={logo} alt="logo"></img>
       <Language onLanguageChange={handleLanguageChange} />
+      </div>
+      <div className="logo-container">
+      <h1 className="logo">Event Booking</h1>
+      </div>
+
     </div>
+
   );
 }
 export default Navbar;

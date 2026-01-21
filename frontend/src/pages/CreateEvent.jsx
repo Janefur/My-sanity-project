@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { sanityQueries } from "../sanityQueries";
 import ImageUpload from "../components/Imageuploader.jsx";
-import { IoReturnUpBackOutline } from "react-icons/io5";
+import { IoIosArrowRoundBack } from "react-icons/io";
 import "../pages/CreateEvent.css";
 
 export default function CreateEvent() {
@@ -134,7 +134,7 @@ export default function CreateEvent() {
       </div>
       <footer className="event-footer">
         <div onClick={() => navigate(-1)}>
-          <IoReturnUpBackOutline size={30} />
+          <IoIosArrowRoundBack size={40} />
           <p>Tillbaka</p>
         </div>
       </footer>

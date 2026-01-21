@@ -57,20 +57,18 @@ function Login({ onLogin, onLogout, loggedInUser }) {
     <div className="login">
       <div className="login-icon">
         {isLoggedIn ? (
-          <div className="iconTextContainer">
+          <div className="iconTextContainer" onClick={handleLogout}>
             <FaUser
               size={22}
               style={{ color: "white", position: "absolute", left: "0" }}
-              onClick={handleLogout}
             />
             <p>Logga ut</p>
           </div>
         ) : (
-          <div className="iconTextContainer">
+          <div className="iconTextContainer" onClick={openModal}>
             <FaUser
               size={22}
               style={{ color: "white", position: "absolute", left: "0" }}
-              onClick={openModal}
             />
             <p>Logga in</p>
           </div>
