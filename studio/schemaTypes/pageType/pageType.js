@@ -4,11 +4,6 @@ export const pageType = {
   type: 'document',
   fields: [
     {
-      name: 'language',
-      title: 'Language',
-      type: 'string',
-    },
-    {
       name: 'title',
       title: 'Title',
       type: 'string',
