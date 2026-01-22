@@ -67,10 +67,9 @@ useEffect(() => {
       <Filter showAllTags={true} language={language} events={events} isSearching={isSearching} onFilterChange={setIsFiltering} />
     
       {post?.carousel && post.carousel.length > 0 && (
-        <Carousel carousel={post.carousel[0]} />
-      )}
-      {post?.carousel && post.carousel.length > 1 && (
-        <Carousel carousel={post.carousel[1]} />
+        post.carousel.map((carouselItem, idx) => (
+          <Carousel key={idx} carousel={carouselItem} />
+        ))
       )}
     </div>
   );

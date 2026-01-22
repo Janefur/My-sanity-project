@@ -24,7 +24,6 @@ export default function Language({ onLanguageChange }) {
       // Skicka språk och data till parent-komponenten
       setCurrentLanguage(language);
       onLanguageChange(language, events, pages);
-
     } catch (error) {
       console.error('Fel vid språkväxling:', error);
     } finally {
