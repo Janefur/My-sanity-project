@@ -37,8 +37,8 @@ function StartPage({ language, events, pages, currentUser }) {
         : (Array.isArray(post) ? post[0]?.title : post?.title)
       }
     </h2>
-      {post?.body?.length > 0 ? (
-        post.body.map((block, index) => {
+      {post?.ingress?.length > 0 ? (
+        post.ingress.map((block, index) => {
           if (block._type === "block") {
             return (
               <p key={index}>

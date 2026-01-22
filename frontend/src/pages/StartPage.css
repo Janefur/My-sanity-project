@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 20px;
   font-family: "Arial", sans-serif;
+  padding-bottom: 120px;
 }
 
 
@@ -18,7 +19,7 @@
 .start-page p {
   line-height: 1.6;
   margin-bottom: 15px;
-  color: #666;
+  color: rgb(21, 21, 21);
 }
 
 .no-content {

@@ -5,6 +5,7 @@
 }
 
 .carousel-title {
+  color: rgb(21, 21, 21) !important;
   text-align: left;
   margin-bottom: 30px;
   font-size: 28px;
@@ -35,6 +36,7 @@
 }
 
 .carousel-caption {
+  color: rgb(21, 21, 21) !important;
   text-align: left;
   margin-top: 15px;
 }

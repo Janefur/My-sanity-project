@@ -39,6 +39,7 @@
   z-index: 100;
   max-height: 400px;
   overflow-y: auto;
+  text-align: left;
 }
 
 .search-result-link {

@@ -8,7 +8,7 @@ export const queries = {
     _id,
     title,
     slug,
-    body,
+    ingress,
     carousel[] {
       title,
       events[]->{

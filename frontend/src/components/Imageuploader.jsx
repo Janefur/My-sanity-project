@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import"../pages/CreateEvent.css";
 
 function ImageUpload({ onImageSelect, initialImage }) {
   const [preview, setPreview] = useState(initialImage || null);
+  const fileInputRef = useRef(null);
 
   useEffect(() => {
     setPreview(initialImage || null);
@@ -22,9 +24,10 @@ function ImageUpload({ onImageSelect, initialImage }) {
   }
 
   // Rensa vald bild
-  function handleRemoveImage() {
+ function handleRemoveImage() {
     setPreview(null);
     if (onImageSelect) onImageSelect(null);
+    if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
   return (
@@ -32,34 +35,20 @@ function ImageUpload({ onImageSelect, initialImage }) {
       <p style={{ fontWeight: "bold" }}>
         Ladda upp en bild för ditt event (valfritt):
       </p>
-      <input type="file" accept="image/*" onChange={handleImageChange} />
+      <input type="file" accept="image/*" onChange={handleImageChange} ref={fileInputRef} />
 
       {preview && (
-        <div style={{ marginTop: "20px", textAlign: "center" }}>
-          <img
+        <div className="image-preview-container">
+          <img className="image-preview"
             src={preview}
             alt="Förhandsvisning"
-            style={{
-              width: "150px",
-              height: "150px",
-              objectFit: "cover",
-              borderRadius: "8px",
-              boxShadow: "0 2px 6px rgba(0,0,0,0.2)",
-            }}
+          
           />
           <div>
             <button
               onClick={handleRemoveImage}
-              style={{
-                backgroundColor: "#007bffff",
-                color: "white",
-                border: "none",
-                borderRadius: "6px",
-                padding: "24px",
-                width: "75%",
-                marginTop: "20px",
-                cursor: "pointer",
-              }}
+              className="remove-image-button"
+          
             >
               Ta bort bild
             </button>

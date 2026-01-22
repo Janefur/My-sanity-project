@@ -16,6 +16,7 @@ export default function CreateEvent() {
     date: "",
     location: "",
     description: "",
+    capacity: 0,
   });
   const [isDuplicate, setIsDuplicate] = useState(false);
   const [hasCreated, setHasCreated] = useState(false);
@@ -68,8 +69,10 @@ export default function CreateEvent() {
           name: { sv: fields.name, en: fields.name },
           date: fields.date,
           location: fields.location,
-          description: fields.description,
+          attendees: [],
+          description: { sv: fields.description, en: fields.description },
           image: image,
+          capacity: fields.capacity,
         }),
       });
 
@@ -80,7 +83,7 @@ export default function CreateEvent() {
         throw new Error(text || "Något gick fel");
       }
 
-      setFields({ name: "", date: "", location: "", description: "" });
+      setFields({ name: "", date: "", location: "", description: "" , capacity: 0, image: null });
 
     } catch (err) {
       console.error("Backend API error:", err);
@@ -145,6 +148,14 @@ export default function CreateEvent() {
             value={fields.description}
             onChange={handleChange}
           ></textarea>
+          <label>Platser:</label>
+          <input
+            type="number"
+            placeholder="Ange antal platser"
+            name="capacity"
+            value={fields.capacity}
+            onChange={handleChange}
+          />
 
           <ImageUpload
             className="image-upload"
@@ -153,7 +164,7 @@ export default function CreateEvent() {
           />
 
           <br />
-          <button type="submit" onClick={() => setIsModalOpen(true)}>Lägg till</button>
+          <button type="submit" className="create-event-button" onClick={() => setIsModalOpen(true)}>Lägg till</button>
         </form>
       </div>
      

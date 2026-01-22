@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 20px;
   font-family: "Arial", sans-serif;
+  padding-bottom:120px;
 }
 
 .single-event h1 {
@@ -22,7 +23,7 @@
   margin: 10px 0;
   font-size: 1.1rem;
   line-height: 1.6;
-  color: #666 !important;
+  color: rgb(21, 21, 21) !important;
 }
 
 .show-more-button {

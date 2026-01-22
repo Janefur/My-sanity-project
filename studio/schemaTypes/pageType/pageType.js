@@ -7,12 +7,6 @@ export const pageType = {
       name: 'language',
       title: 'Language',
       type: 'string',
-      options: {
-        list: [
-          {title: 'Svenska', value: 'sv'},
-          {title: 'English', value: 'en'},
-        ],
-      },
     },
     {
       name: 'title',
@@ -29,8 +23,8 @@ export const pageType = {
       },
     },
     {
-      name: 'body',
-      title: 'Body',
+      name: 'ingress',
+      title: 'Ingress',
       type: 'array',
       of: [{type: 'block'}, {type: 'carousel'}],
     },

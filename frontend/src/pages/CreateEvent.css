@@ -55,7 +55,7 @@ textarea {
   align-items: center;
   min-height: 100vh;
   width: 100%;
-  padding-bottom: 200px; /* To ensure content is not hidden behind the footer */
+  padding-bottom: 120px; /* To ensure content is not hidden behind the footer */
 }
 
 .create-form {
@@ -66,8 +66,10 @@ textarea {
   color: #5b1048;
 }
 
-.create-form button {
-  background: linear-gradient(135deg, #a01a7d 0%, #8b1569 100%) !important;
+
+
+.create-event-button {
+  background: #a01a7d !important;
   color: white !important;
   padding: 12px 24px;
   cursor: pointer;
@@ -98,8 +100,9 @@ textarea {
 }
 
 .image-upload input[type="file"]::file-selector-button {
-  background: linear-gradient(135deg, #a01a7d 0%, #8b1569 100%);
-  color: white;
+  outline: 2px solid #5b1048;
+  background: transparent;
+  color: #5b1048;
   padding: 8px 16px;
   border: none;
   border-radius: 4px;
@@ -122,3 +125,25 @@ textarea {
   cursor: pointer;
 }
 
+.remove-image-button {
+  background-color: #e74c3c !important;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 24px;
+  width: 75%; 
+  margin-top: 20px;
+  cursor: pointer;
+}
+
+.image-preview-container {
+        margin-top: 20px;
+        text-align: center;
+}
+.image-preview {
+        width: 150px;
+        height: 150px;
+        object-fit: cover;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+}

@@ -21,7 +21,7 @@ export default defineConfig({
       ],
       defaultLanguages: ['sv'],
       fieldTypes: ['string', 'text'],
-    })
+    }),
   ],
 
   i18n: {

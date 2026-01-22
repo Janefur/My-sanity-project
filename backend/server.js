@@ -63,8 +63,14 @@ app.post("/api/create-event", async (req, res) => {
          },
          date,
          location: location.trim(),
-         description: description?.trim() || "",
+         description: {
+            sv: description?.sv?.trim() || "",
+            en: description?.en?.trim() || ""
+         },
          photo,
+         attendees: [],
+         waitlist: [],
+         capacity: Number(req.body.capacity) || 0,
       };
 
       // Skapa i Sanity
