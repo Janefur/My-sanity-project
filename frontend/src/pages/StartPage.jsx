@@ -41,7 +41,7 @@ function StartPage({ language, events, pages, currentUser }) {
         post.ingress.map((block, index) => {
           if (block._type === "block") {
             return (
-              <p key={index}>
+              <p key={index} className="start-page-ingress">
                 {block.children.map((child) => child.text).join("")}
               </p>
             );

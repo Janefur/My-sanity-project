@@ -77,7 +77,6 @@ export default function CreateEvent() {
       });
 
       const text = await response.text();
-      console.log("RAW BACKEND RESPONSE:", text);
 
       if (!response.ok) {
         throw new Error(text || "Något gick fel");

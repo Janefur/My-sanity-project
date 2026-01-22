@@ -32,7 +32,6 @@ function Filter({ event, showAllTags = false, language = "sv", events, isSearchi
     if (showAllTags) {
       // Om events prop finns, använd den
       if (events && events.length > 0) {
-        console.log('Filter: Använder events från props', events);
         setAllEvents(events);
         setLoading(false);
       } else {
@@ -40,7 +39,6 @@ function Filter({ event, showAllTags = false, language = "sv", events, isSearchi
           setLoading(true);
           try {
             const fetchedEvents = await sanityQueries.getAllEvents(language);
-            console.log('Filter: Hämtade events', fetchedEvents);
             setAllEvents(fetchedEvents);
           } catch (error) {
             console.error('Error fetching events for tags:', error);

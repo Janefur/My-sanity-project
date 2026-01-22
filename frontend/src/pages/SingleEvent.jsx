@@ -74,9 +74,9 @@ useEffect(() => {
         setEvent(updatedEvent);
 
         if (data.status === 'attendees') {
-          console.log('Bokning lyckades! 🎉');
+          console.log('Bokning lyckades');
         } else if (data.status === 'waitlist') {
-          console.log('Du är tillagd på väntelistan 📝');
+          console.log('Väntelista lyckades');
         }
       } else {
         console.error(data.error);

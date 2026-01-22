@@ -16,10 +16,11 @@
 
 }
 
-.start-page p {
+.start-page-ingress {
   line-height: 1.6;
   margin-bottom: 15px;
   color: rgb(21, 21, 21);
+  text-align: center;
 }
 
 .no-content {
