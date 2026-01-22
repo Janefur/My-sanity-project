@@ -3,7 +3,20 @@ export const pageType = {
   title: 'Page Type',
   type: 'document',
   fields: [
-    
+    {
+      name: 'language',
+      title: 'Language',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Svenska', value: 'sv' },
+        ],
+        layout: 'radio',
+        noEdit: true
+
+      },
+      initialValue: 'sv'
+    },
     {
       name: 'title',
       title: 'Title',
