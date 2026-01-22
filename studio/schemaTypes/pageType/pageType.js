@@ -3,6 +3,7 @@ export const pageType = {
   title: 'Page Type',
   type: 'document',
   fields: [
+    
     {
       name: 'title',
       title: 'Title',

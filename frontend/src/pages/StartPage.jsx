@@ -12,7 +12,19 @@ function StartPage({ language, events, pages, currentUser }) {
     const [isFiltering, setIsFiltering] = useState(false);
 
 
-
+useEffect(() => {
+  if (pages) {
+    setPost(pages);
+    console.log("pages prop:", pages);
+  } else {
+    async function fetchPageData() {
+      const pageData = await sanityQueries.getPageBySlug("startsida", language || "sv");
+      setPost(pageData);
+      console.log("pageData från Sanity:", pageData);
+    }
+    fetchPageData();
+  }
+}, [pages, language]);
 
     useEffect(() => {
       // Om pages prop finns, använd den istället för att hämta
