@@ -8,6 +8,7 @@ import {FaRegCircleCheck} from 'react-icons/fa6';
 
 export default function CreateEvent() {
   const [image, setImage] = useState(null);
+  const [resetImageTrigger, setResetImageTrigger] = useState(false);
 
   const navigate = useNavigate();
   const [posts, setPosts] = useState([]);
@@ -83,6 +84,8 @@ export default function CreateEvent() {
       }
 
       setFields({ name: "", date: "", location: "", description: "" , capacity: 0, image: null });
+      setImage(null);
+      setResetImageTrigger(t => !t); // toggla för att trigga reset
 
     } catch (err) {
       console.error("Backend API error:", err);
@@ -160,10 +163,11 @@ export default function CreateEvent() {
             className="image-upload"
             style={{ width: "200px" }}
             onImageSelect={setImage}
+            resetTrigger={resetImageTrigger}
           />
 
           <br />
-          <button type="submit" className="create-event-button" onClick={() => setIsModalOpen(true)}>Lägg till</button>
+          <button type="submit" className="create-event-button" onClick={() => setIsModalOpen(true)}>Skapa Event</button>
         </form>
       </div>
      

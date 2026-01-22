@@ -1,13 +1,24 @@
+
 import { useState, useEffect, useRef } from "react";
 import"../pages/CreateEvent.css";
 
-function ImageUpload({ onImageSelect, initialImage }) {
+
+function ImageUpload({ onImageSelect, initialImage, resetTrigger }) {
   const [preview, setPreview] = useState(initialImage || null);
   const fileInputRef = useRef(null);
 
   useEffect(() => {
     setPreview(initialImage || null);
   }, [initialImage]);
+
+  // Nollställ bild och file input när resetTrigger ändras
+  useEffect(() => {
+    if (resetTrigger) {
+      setPreview(null);
+      if (onImageSelect) onImageSelect(null);
+      if (fileInputRef.current) fileInputRef.current.value = "";
+    }
+  }, [resetTrigger, onImageSelect]);
 
   // Hantera när användaren väljer en bild
   function handleImageChange(event) {
