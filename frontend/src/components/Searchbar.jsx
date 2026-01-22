@@ -58,7 +58,6 @@ export function SearchResults({ filteredEvents }) {
  function Searchbar({ language = "sv", onSearchChange, isFiltering = false }) {
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
 
   // Rensa sökfältet när någon börjar filtrera
   useEffect(() => {
@@ -76,7 +75,6 @@ export function SearchResults({ filteredEvents }) {
       return;
     }
 
-    setIsLoading(true);
     try {
       const searchResults = await getSearchResults(searchQuery, language);
       setResults(searchResults);
@@ -86,8 +84,6 @@ export function SearchResults({ filteredEvents }) {
       console.error('Search error:', error);
       setResults([]);
       if (onSearchChange) onSearchChange(false);
-    } finally {
-      setIsLoading(false);
     }
   };
 

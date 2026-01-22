@@ -6,11 +6,11 @@ import { IoIosArrowRoundBack } from "react-icons/io";
 import { useNavigate } from "react-router-dom";
 
 function SingleEvent({ language = "sv", currentUser }) {
-  const { slug } = useParams();
-  const [event, setEvent] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [bookingLoading, setBookingLoading] = useState(false);
-  const [bookingStatus, setBookingStatus] = useState(null); // "attendees" eller "waitlist"
+const { slug } = useParams();
+const [event, setEvent] = useState(null);
+const [loading, setLoading] = useState(true);
+const [bookingLoading, setBookingLoading] = useState(false);
+
 const [isExpanded, setIsExpanded] = useState(false);
 const navigate = useNavigate();
 const maxLength = 200; // Antal tecken att visa
@@ -67,8 +67,6 @@ useEffect(() => {
       const data = await response.json();
 
       if (response.ok) {
-        setBookingStatus(data.status); // "attendees" eller "waitlist"
-
         // Hämta uppdaterad data från Sanity
         const updatedEvent = await sanityQueries.getEventBySlug(slug, language);
         setEvent(updatedEvent);
@@ -99,7 +97,7 @@ try {
         })
       })
 
-      const data = await response.json();
+      await response.json();
     } catch (error) {
       console.error('Kunde inte avboka:', error);
     } finally {
@@ -118,9 +116,8 @@ try {
     return <div className="single-event">Event hittades inte</div>;
   }
 
-  // Säkerställ att name och description är strängar
+  // Säkerställ att name är strängar
   const eventName = typeof event.name === 'string' ? event.name : event.name?.[language] || event.name?.sv || 'Untitled Event';
-  const eventDescription = typeof event.description === 'string' ? event.description : event.description?.[language] || event.description?.sv || '';
 
   // Bokningslogik
   const hasBooked = event.attendees?.includes(currentUser?.username) || event.waitlist?.includes(currentUser?.username);

@@ -94,7 +94,7 @@ app.post("/api/create-event", async (req, res) => {
 });
 
 // Health check
-app.get("/api/health", (req, res) => {
+app.get("/api/health", (res) => {
    res.json({ status: "OK", message: "Backend server is running" });
 });
 
